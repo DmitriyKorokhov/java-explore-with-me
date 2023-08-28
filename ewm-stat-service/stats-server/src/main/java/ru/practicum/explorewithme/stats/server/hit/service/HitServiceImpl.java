@@ -17,7 +17,7 @@ public class HitServiceImpl implements HitService {
 
     @Override
     public void addHit(HitDto hitDto) {
-        Hit hit = HitMapper.INSTANCE.toHit(hitDto);
+        Hit hit = HitMapper.toHit(hitDto);
         hitRepository.save(hit);
     }
 }
