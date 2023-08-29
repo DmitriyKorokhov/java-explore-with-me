@@ -43,7 +43,7 @@ class StatsRepositoryTest {
     private final LocalDateTime newEndPast = DateFormatter.formatDate("1987-09-06 11:00:00");
 
     @BeforeEach
-    private void init() {
+    private void beforeEach() {
         hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
         entityManager.persist(hit1);
 

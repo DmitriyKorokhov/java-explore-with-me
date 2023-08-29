@@ -2,11 +2,11 @@ package ru.practicum.explorewithme.stats.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@Value
+@Data
 @Builder
 @AllArgsConstructor
 public class StatsDto {

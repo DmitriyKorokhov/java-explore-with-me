@@ -34,7 +34,7 @@ class HitServiceImplTest {
 
 
     @BeforeEach
-    private void init() {
+    private void beforeEach() {
         hitDto1 = HitDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")
