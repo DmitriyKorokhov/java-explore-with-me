@@ -4,14 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.practicum.explorewithme.stats.dto.HitDto;
-import ru.practicum.explorewithme.stats.server.exception.ValidationDateException;
 import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HitMapperTest {
     private HitDto hitDto;
@@ -37,15 +35,4 @@ class HitMapperTest {
         assertThat(hit.getIp().equals(hitDto.getIp())).isTrue();
         assertThat(hit.getTimestamp().equals(LocalDateTime.of(2022, 9, 06, 11, 00, 00))).isTrue();
     }
-/*
-    @Test
-    @DisplayName("Тест преобразования hitDto -> hit, невалидная дата")
-    void toHitNotValidDateTest() {
-        hitDto.setTimestamp(LocalDateTime.parse("rrtt-09-@@ 11:00:aa"));
-        assertThrows(ValidationDateException.class,
-                () -> HitMapper.toHit(hitDto));
-
-    }
-
- */
 }
