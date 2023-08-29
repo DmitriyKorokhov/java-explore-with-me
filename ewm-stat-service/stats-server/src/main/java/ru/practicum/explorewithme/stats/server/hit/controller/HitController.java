@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.stats.dto.HitDto;
-import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 import ru.practicum.explorewithme.stats.server.hit.service.HitService;
 
 @Slf4j
@@ -19,8 +18,8 @@ public class HitController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Hit addHit(@Validated @RequestBody HitDto hitDto) {
+    public void addHit(@Validated @RequestBody HitDto hitDto) {
         log.info("Сохранение информации о том, что к эндпоинту был запрос");
-        return hitService.addHit(hitDto);
+        hitService.addHit(hitDto);
     }
 }

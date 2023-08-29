@@ -16,7 +16,7 @@ class HitMapperTest {
     private HitDto hitDto;
 
     @BeforeEach
-    private void beforeEach() {
+    private void init() {
         hitDto = HitDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")

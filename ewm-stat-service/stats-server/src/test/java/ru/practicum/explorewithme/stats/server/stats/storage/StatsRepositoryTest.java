@@ -34,6 +34,7 @@ class StatsRepositoryTest {
     private Hit hit4;
     private Hit hit5;
     private List<String> uris = Arrays.asList("/events/1");
+    private boolean unique = false;
     private final LocalDateTime start = DateFormatter.formatDate("2019-09-06 11:00:00");
     private final LocalDateTime end = DateFormatter.formatDate("2030-09-06 11:00:00");
     private final LocalDateTime newStartFuture = DateFormatter.formatDate("2045-09-06 11:00:00");
@@ -42,7 +43,7 @@ class StatsRepositoryTest {
     private final LocalDateTime newEndPast = DateFormatter.formatDate("1987-09-06 11:00:00");
 
     @BeforeEach
-    private void beforeEach() {
+    private void init() {
         hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
         entityManager.persist(hit1);
 

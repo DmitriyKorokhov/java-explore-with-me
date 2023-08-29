@@ -1,12 +1,12 @@
 package ru.practicum.explorewithme.stats.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Data
+@Value
 @Builder
 public class HitDto {
     private Long id;
