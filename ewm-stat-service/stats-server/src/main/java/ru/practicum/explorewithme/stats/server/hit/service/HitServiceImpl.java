@@ -11,14 +11,14 @@ import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HitServiceImpl implements HitService {
 
     private final HitRepository hitRepository;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Hit addHit(HitDto hitDto) {
         Hit hit = HitMapper.toHit(hitDto);
         return hitRepository.save(hit);
