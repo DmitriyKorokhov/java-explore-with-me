@@ -1,7 +1,6 @@
 package ru.practicum.explorewithme.stats.server.hit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ class HitControllerTest {
     private HitDto hitDto;
 
     @BeforeEach
-    private void init() {
+    private void beforeEach() {
         hitDto = HitDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")
@@ -38,71 +37,66 @@ class HitControllerTest {
     }
 
     @Test
-    @SneakyThrows
     void addHitValidHitDtoTest() {
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(hitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful());
+        try {
+            mockMvc.perform(post("/hit")
+                            .content(objectMapper.writeValueAsString(hitDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is2xxSuccessful());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void addHitNotAppValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("")
-                .uri("/events/1")
-                .ip("192.163.0.1")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(hitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+        hitDto.setApp("");
+        try {
+            mockMvc.perform(post("/hit")
+                            .content(objectMapper.writeValueAsString(hitDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is4xxClientError());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void addHitNotUriValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("")
-                .ip("192.163.0.1")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(hitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+        hitDto.setUri("");
+        try {
+            mockMvc.perform(post("/hit")
+                            .content(objectMapper.writeValueAsString(hitDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is4xxClientError());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void addHitNotIpValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("/events/1")
-                .ip("")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(hitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+        hitDto.setIp("");
+        try {
+            mockMvc.perform(post("/hit")
+                            .content(objectMapper.writeValueAsString(hitDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is4xxClientError());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void addHitNotDateValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("/events/1")
-                .ip("192.163.0.1")
-                .timestamp("")
-                .build();
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(hitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+        hitDto.setTimestamp("");
+        try {
+            mockMvc.perform(post("/hit")
+                            .content(objectMapper.writeValueAsString(hitDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is4xxClientError());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

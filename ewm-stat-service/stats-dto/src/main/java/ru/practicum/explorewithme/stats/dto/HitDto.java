@@ -1,21 +1,21 @@
 package ru.practicum.explorewithme.stats.dto;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Value
+@Data
 @Builder
 public class HitDto {
-    Long id;
+    private Long id;
     @NotBlank(message = "App у Hit не должно быть пустым")
-    String app;
+    private String app;
     @NotBlank(message = "Uri у Hit не должно быть пустым")
-    String uri;
+    private String uri;
     @NotBlank(message = "Ip у Hit не должно быть пустым")
-    String ip;
+    private String ip;
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}", message = "Неверный формат времени у Hit")
-    String timestamp;
+    private String timestamp;
 }

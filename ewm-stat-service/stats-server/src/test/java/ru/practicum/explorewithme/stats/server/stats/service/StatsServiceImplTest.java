@@ -35,7 +35,7 @@ class StatsServiceImplTest {
     private final String badStart = "2045-09-06 11:00:00";
 
     @BeforeEach
-    private void init() {
+    private void beforeEach() {
         Hit hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
         Hit hit2 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-07 12:00:00")));
         Hit hit3 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-08 13:00:00")));

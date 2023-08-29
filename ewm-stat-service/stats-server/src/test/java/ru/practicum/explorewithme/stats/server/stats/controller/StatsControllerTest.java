@@ -1,7 +1,7 @@
 package ru.practicum.explorewithme.stats.server.stats.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ class StatsControllerTest {
     private StatsDto statsDto2;
 
     @BeforeEach
-    void init() {
+    void beforeEach() {
         statsDto1 = StatsDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")
@@ -54,50 +54,74 @@ class StatsControllerTest {
     }
 
     @Test
-    @SneakyThrows
     void getStatsValidRequestTest() {
         when(statsService.getStats(any(), any(), any(), anyBoolean())).thenReturn(stats);
-        String result = mockMvc.perform(get("/stats")
-                        .param("start", "2020-09-06 11:00:00")
-                        .param("end", "2036-09-06 12:00:00")
-                        .param("uris", "/events")
-                        .param("unique", "true"))
-                .andExpect(status().is2xxSuccessful())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+        String result;
+        try {
+            result = mockMvc.perform(get("/stats")
+                            .param("start", "2020-09-06 11:00:00")
+                            .param("end", "2036-09-06 12:00:00")
+                            .param("uris", "/events")
+                            .param("unique", "true"))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         verify(statsService, times(1)).getStats(any(), any(), any(), anyBoolean());
-        assertEquals(objectMapper.writeValueAsString(stats), result);
+        try {
+            assertEquals(objectMapper.writeValueAsString(stats), result);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void getStatsRequestNotUniqueTest() {
         when(statsService.getStats(any(), any(), any(), anyBoolean())).thenReturn(stats);
-        String result = mockMvc.perform(get("/stats")
-                        .param("start", "2020-09-06 11:00:00")
-                        .param("end", "2036-09-06 12:00:00")
-                        .param("uris", "/events"))
-                .andExpect(status().is2xxSuccessful())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+        String result;
+        try {
+            result = mockMvc.perform(get("/stats")
+                            .param("start", "2020-09-06 11:00:00")
+                            .param("end", "2036-09-06 12:00:00")
+                            .param("uris", "/events"))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         verify(statsService, times(1)).getStats(any(), any(), any(), anyBoolean());
-        assertEquals(objectMapper.writeValueAsString(stats), result);
+        try {
+            assertEquals(objectMapper.writeValueAsString(stats), result);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @SneakyThrows
     void getStatsRequestNotListTest() {
         when(statsService.getStats(any(), any(), any(), anyBoolean())).thenReturn(stats);
-        String result = mockMvc.perform(get("/stats")
-                        .param("start", "2020-09-06 11:00:00")
-                        .param("end", "2036-09-06 12:00:00"))
-                .andExpect(status().is2xxSuccessful())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+        String result;
+        try {
+            result = mockMvc.perform(get("/stats")
+                            .param("start", "2020-09-06 11:00:00")
+                            .param("end", "2036-09-06 12:00:00"))
+                    .andExpect(status().is2xxSuccessful())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         verify(statsService, times(1)).getStats(any(), any(), any(), anyBoolean());
-        assertEquals(objectMapper.writeValueAsString(stats), result);
+        try {
+            assertEquals(objectMapper.writeValueAsString(stats), result);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

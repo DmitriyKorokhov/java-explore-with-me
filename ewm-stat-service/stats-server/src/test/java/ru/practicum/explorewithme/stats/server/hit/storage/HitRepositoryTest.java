@@ -26,7 +26,7 @@ class HitRepositoryTest {
     private Hit hit2;
 
     @BeforeEach
-    private void init() {
+    private void beforeEach() {
         hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
         entityManager.persist(hit1);
 
@@ -36,12 +36,15 @@ class HitRepositoryTest {
     }
 
     @Test
-    void saveHitTest() {
+    void saveTheFistOfTwoHitTest() {
         assertThat(hit1.getApp().equals("ewm-main-service")).isTrue();
         assertThat(hit1.getUri().equals("/events/1")).isTrue();
         assertThat(hit1.getIp().equals("192.163.0.1")).isTrue();
         assertThat(hit1.getTimestamp().equals(LocalDateTime.of(2022, 9, 06, 11, 00, 00))).isTrue();
+    }
 
+    @Test
+    void saveTheSecondOfTwoHitTest() {
         assertThat(hit2.getApp().equals("ewm-stat-service")).isTrue();
         assertThat(hit2.getUri().equals("/events/56")).isTrue();
         assertThat(hit2.getIp().equals("192.163.0.3")).isTrue();
