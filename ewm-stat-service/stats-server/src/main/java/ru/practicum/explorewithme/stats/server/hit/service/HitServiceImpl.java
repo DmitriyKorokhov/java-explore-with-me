@@ -20,7 +20,7 @@ public class HitServiceImpl implements HitService {
     @Override
     @Transactional
     public Hit addHit(HitDto hitDto) {
-        Hit hit = HitMapper.toHit(hitDto);
+        Hit hit = HitMapper.INSTANCE.toHit(hitDto);
         return hitRepository.save(hit);
     }
 }

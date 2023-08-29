@@ -28,7 +28,7 @@ class HitMapperTest {
     @Test
     @DisplayName("Тест преобразования hitDto -> hit")
     void toHitValidDataTest() {
-        Hit hit = HitMapper.toHit(hitDto);
+        Hit hit = HitMapper.INSTANCE.toHit(hitDto);
         assertThat(hit.getUri().equals(hitDto.getUri())).isTrue();
         assertThat(hit.getApp().equals(hitDto.getApp())).isTrue();
         assertThat(hit.getIp().equals(hitDto.getIp())).isTrue();
@@ -45,7 +45,7 @@ class HitMapperTest {
                 .timestamp("rrtt-09-@@ 11:00:aa")
                 .build();
         assertThrows(ValidationDateException.class,
-                () -> HitMapper.toHit(hitDto));
+                () -> HitMapper.INSTANCE.toHit(hitDto));
 
     }
 }
