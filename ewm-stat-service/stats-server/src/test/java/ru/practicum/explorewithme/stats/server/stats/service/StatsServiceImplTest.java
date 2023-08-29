@@ -10,10 +10,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.explorewithme.stats.dto.StatsDto;
 import ru.practicum.explorewithme.stats.server.exception.ValidationDateException;
 import ru.practicum.explorewithme.stats.server.hit.storage.HitRepository;
+import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,25 +29,18 @@ class StatsServiceImplTest {
     @Autowired
     StatsServiceImpl statsService;
     private List<String> uris = Arrays.asList("/events/1");
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private final LocalDateTime start = LocalDateTime.parse("2019-09-06 11:00:00", formatter);
-    private final LocalDateTime end = LocalDateTime.parse("2030-09-06 11:00:00", formatter);
-    private final LocalDateTime badEnd = LocalDateTime.parse("1987-09-06 11:00:00", formatter);
-    private final LocalDateTime badStart = LocalDateTime.parse("2045-09-06 11:00:00", formatter);
-    private LocalDateTime timeForHit1 = LocalDateTime.parse("2022-09-06 11:00:00", formatter);
-    private LocalDateTime timeForHit2 = LocalDateTime.parse("2022-09-07 12:00:00", formatter);
-    private LocalDateTime timeForHit3 = LocalDateTime.parse("2022-09-08 13:00:00", formatter);
-    private LocalDateTime timeForHit4 = LocalDateTime.parse("2023-03-03 07:00:00", formatter);
-    private LocalDateTime timeForHit5 = LocalDateTime.parse("2023-03-06 09:00:00", formatter);
-
+    private final String start = "2019-09-06 11:00:00";
+    private final String end = "2030-09-06 11:00:00";
+    private final String badEnd = "1987-09-06 11:00:00";
+    private final String badStart = "2045-09-06 11:00:00";
 
     @BeforeEach
     private void beforeEach() {
-        Hit hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit1));
-        Hit hit2 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit2));
-        Hit hit3 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit3));
-        Hit hit4 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.100.100", timeForHit4));
-        Hit hit5 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/56", "192.163.120.120", timeForHit5));
+        Hit hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
+        Hit hit2 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-07 12:00:00")));
+        Hit hit3 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-08 13:00:00")));
+        Hit hit4 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.100.100", DateFormatter.formatDate("2023-03-03 07:00:00")));
+        Hit hit5 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/56", "192.163.120.120", DateFormatter.formatDate("2023-03-06 09:00:00")));
 
     }
 

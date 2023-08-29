@@ -9,10 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.explorewithme.stats.dto.HitDto;
 import ru.practicum.explorewithme.stats.server.hit.storage.HitRepository;
+import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -32,13 +31,6 @@ class HitServiceImplTest {
     private Hit hit1;
     private Hit hit2;
     private Hit hit3;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private LocalDateTime timeForHitDto1 = LocalDateTime.parse("2022-09-06 11:00:00", formatter);
-    private LocalDateTime timeForHitDto2 = LocalDateTime.parse("2022-09-06 13:00:00", formatter);
-    private LocalDateTime timeForHitDto3 = LocalDateTime.parse("2022-09-07 14:00:00", formatter);
-    private LocalDateTime timeForHit1 = LocalDateTime.parse("2022-09-06 11:00:00", formatter);
-    private LocalDateTime timeForHit2 = LocalDateTime.parse("2022-09-06 13:00:00", formatter);
-    private LocalDateTime timeForHit3 = LocalDateTime.parse("2022-09-07 14:00:00", formatter);
 
 
     @BeforeEach
@@ -47,40 +39,40 @@ class HitServiceImplTest {
                 .app("ewm-main-service")
                 .uri("/events/1")
                 .ip("192.163.0.1")
-                .timestamp(timeForHitDto1)
+                .timestamp("2022-09-06 11:00:00")
                 .build();
         hitDto2 = HitDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")
                 .ip("192.163.0.101")
-                .timestamp(timeForHitDto2)
+                .timestamp("2022-09-06 13:00:00")
                 .build();
         hitDto3 = HitDto.builder()
                 .app("ewm-main-service")
                 .uri("/events/56")
                 .ip("192.163.12.99")
-                .timestamp(timeForHitDto3)
+                .timestamp("2022-09-07 14:00:00")
                 .build();
         hit1 = Hit.builder()
                 .id(1L)
                 .app("ewm-main-service")
                 .uri("/events/1")
                 .ip("192.163.0.1")
-                .timestamp(timeForHit1)
+                .timestamp(DateFormatter.formatDate("2022-09-06 11:00:00"))
                 .build();
         hit2 = Hit.builder()
                 .id(2L)
                 .app("ewm-main-service")
                 .uri("/events/1")
                 .ip("192.163.0.101")
-                .timestamp(timeForHit2)
+                .timestamp(DateFormatter.formatDate("2022-09-06 13:00:00"))
                 .build();
         hit3 = Hit.builder()
                 .id(3L)
                 .app("ewm-main-service")
                 .uri("/events/56")
                 .ip("192.163.12.99")
-                .timestamp(timeForHit3)
+                .timestamp(DateFormatter.formatDate("2022-09-07 14:00:00"))
                 .build();
     }
 

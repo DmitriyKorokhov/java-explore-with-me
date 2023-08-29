@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.stats.dto.StatsDto;
+import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 import ru.practicum.explorewithme.stats.server.exception.ValidationDateException;
 import ru.practicum.explorewithme.stats.server.stats.storage.StatsRepository;
 
@@ -22,19 +23,21 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        validDate(start, end);
+    public List<StatsDto> getStats(String start, String end, List<String> uris, boolean unique) {
+        LocalDateTime newStart = DateFormatter.formatDate(start);
+        LocalDateTime newEnd = DateFormatter.formatDate(end);
+        validDate(newStart, newEnd);
         if (uris == null && !unique) {
-            return statsRepository.findByDate(start, end);
+            return statsRepository.findByDate(newStart, newEnd);
         }
         if (uris == null && unique) {
-            return statsRepository.findByDateAndUniqueIp(start, end);
+            return statsRepository.findByDateAndUniqueIp(newStart, newEnd);
         }
         if (!uris.isEmpty() && !unique) {
-            return statsRepository.findByDateAndUris(start, end, uris);
+            return statsRepository.findByDateAndUris(newStart, newEnd, uris);
         }
         if (!uris.isEmpty() && unique) {
-            return statsRepository.findByDateAndUrisWithUniqueIp(start, end, uris);
+            return statsRepository.findByDateAndUrisWithUniqueIp(newStart, newEnd, uris);
         }
         return new ArrayList<>();
     }
