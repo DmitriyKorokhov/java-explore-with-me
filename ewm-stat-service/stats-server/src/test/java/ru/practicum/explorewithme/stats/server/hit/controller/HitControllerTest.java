@@ -12,6 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.explorewithme.stats.dto.HitDto;
 import ru.practicum.explorewithme.stats.server.hit.service.HitServiceImpl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +28,8 @@ class HitControllerTest {
     @MockBean
     HitServiceImpl hitService;
     private HitDto hitDto;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private LocalDateTime time = LocalDateTime.parse("2022-09-06 11:00:00", formatter);
 
     @BeforeEach
     private void beforeEach() {
@@ -32,7 +37,7 @@ class HitControllerTest {
                 .app("ewm-main-service")
                 .uri("/events/1")
                 .ip("192.163.0.1")
-                .timestamp("2022-09-06 11:00:00")
+                .timestamp(time)
                 .build();
     }
 
@@ -50,12 +55,7 @@ class HitControllerTest {
 
     @Test
     void addHitNotAppValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("")
-                .uri("/events/1")
-                .ip("192.163.0.1")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
+        hitDto.setApp("");
         try {
             mockMvc.perform(post("/hit")
                             .content(objectMapper.writeValueAsString(hitDto))
@@ -68,12 +68,7 @@ class HitControllerTest {
 
     @Test
     void addHitNotUriValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("")
-                .ip("192.163.0.1")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
+        hitDto.setUri("");
         try {
             mockMvc.perform(post("/hit")
                             .content(objectMapper.writeValueAsString(hitDto))
@@ -86,12 +81,7 @@ class HitControllerTest {
 
     @Test
     void addHitNotIpValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("/events/1")
-                .ip("")
-                .timestamp("2022-09-06 11:00:00")
-                .build();
+        hitDto.setIp("");
         try {
             mockMvc.perform(post("/hit")
                             .content(objectMapper.writeValueAsString(hitDto))
@@ -104,12 +94,7 @@ class HitControllerTest {
 
     @Test
     void addHitNotDateValidHitDtoTest() {
-        hitDto = HitDto.builder()
-                .app("ewm-main-service")
-                .uri("/events/1")
-                .ip("192.163.0.1")
-                .timestamp("")
-                .build();
+        hitDto.setTimestamp(null);
         try {
             mockMvc.perform(post("/hit")
                             .content(objectMapper.writeValueAsString(hitDto))

@@ -8,11 +8,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.stats.dto.StatsDto;
-import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 import ru.practicum.explorewithme.stats.server.hit.model.Hit;
 import ru.practicum.explorewithme.stats.server.hit.storage.HitRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,28 +35,34 @@ class StatsRepositoryTest {
     private Hit hit5;
     private List<String> uris = Arrays.asList("/events/1");
     private boolean unique = false;
-    private final LocalDateTime start = DateFormatter.formatDate("2019-09-06 11:00:00");
-    private final LocalDateTime end = DateFormatter.formatDate("2030-09-06 11:00:00");
-    private final LocalDateTime newStartFuture = DateFormatter.formatDate("2045-09-06 11:00:00");
-    private final LocalDateTime newEndFuture = DateFormatter.formatDate("2045-09-06 11:00:00");
-    private final LocalDateTime newStartPast = DateFormatter.formatDate("1987-09-06 11:00:00");
-    private final LocalDateTime newEndPast = DateFormatter.formatDate("1987-09-06 11:00:00");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final LocalDateTime start = LocalDateTime.parse("2019-09-06 11:00:00", formatter);
+    private final LocalDateTime end = LocalDateTime.parse("2030-09-06 11:00:00", formatter);
+    private final LocalDateTime newStartFuture = LocalDateTime.parse("2045-09-06 11:00:00", formatter);
+    private final LocalDateTime newEndFuture = LocalDateTime.parse("2045-09-06 11:00:00", formatter);
+    private final LocalDateTime newStartPast = LocalDateTime.parse("1987-09-06 11:00:00", formatter);
+    private final LocalDateTime newEndPast = LocalDateTime.parse("1987-09-06 11:00:00", formatter);
+    private LocalDateTime timeForHit1 = LocalDateTime.parse("2022-09-06 11:00:00", formatter);
+    private LocalDateTime timeForHit2 = LocalDateTime.parse("2022-09-07 12:00:00", formatter);
+    private LocalDateTime timeForHit3 = LocalDateTime.parse("2022-09-08 13:00:00", formatter);
+    private LocalDateTime timeForHit4 = LocalDateTime.parse("2023-03-03 07:00:00", formatter);
+    private LocalDateTime timeForHit5 = LocalDateTime.parse("2023-03-06 09:00:00", formatter);
 
     @BeforeEach
     private void beforeEach() {
-        hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-06 11:00:00")));
+        hit1 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit1));
         entityManager.persist(hit1);
 
-        hit2 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-07 12:00:00")));
+        hit2 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit2));
         entityManager.persist(hit2);
 
-        hit3 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", DateFormatter.formatDate("2022-09-08 13:00:00")));
+        hit3 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.0.1", timeForHit3));
         entityManager.persist(hit3);
 
-        hit4 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.100.100", DateFormatter.formatDate("2023-03-03 07:00:00")));
+        hit4 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/1", "192.163.100.100", timeForHit4));
         entityManager.persist(hit4);
 
-        hit5 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/56", "192.163.120.120", DateFormatter.formatDate("2023-03-06 09:00:00")));
+        hit5 = hitRepository.save(new Hit(null, "ewm-main-service", "/events/56", "192.163.120.120", timeForHit5));
         entityManager.persist(hit5);
     }
 

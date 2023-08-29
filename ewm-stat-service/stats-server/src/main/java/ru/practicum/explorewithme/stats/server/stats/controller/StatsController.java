@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.stats.dto.StatsDto;
 import ru.practicum.explorewithme.stats.server.stats.service.StatsService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -19,8 +20,8 @@ public class StatsController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<StatsDto> getStats(@RequestParam String start,
-                                   @RequestParam String end,
+    public List<StatsDto> getStats(@RequestParam LocalDateTime start,
+                                   @RequestParam LocalDateTime end,
                                    @RequestParam(required = false) List<String> uris,
                                    @RequestParam(defaultValue = "false") Boolean unique) {
         return statsService.getStats(start, end, uris, unique);

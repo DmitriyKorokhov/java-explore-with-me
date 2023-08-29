@@ -2,9 +2,11 @@ package ru.practicum.explorewithme.stats.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -16,6 +18,7 @@ public class HitDto {
     private String uri;
     @NotBlank(message = "Ip у Hit не должно быть пустым")
     private String ip;
-    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}", message = "Неверный формат времени у Hit")
-    private String timestamp;
+    @NotNull(message = "Time stamp у Hit должен существовать")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime timestamp;
 }
