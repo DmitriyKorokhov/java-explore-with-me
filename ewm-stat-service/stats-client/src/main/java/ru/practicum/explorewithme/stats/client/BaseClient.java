@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Slf4j
 public abstract class BaseClient {
-    protected static final String BASE_URL = "http://localhost:9090";
+    private static final String BASE_URL = "http://localhost:9090";
     WebClient client = WebClient.create(BASE_URL);
 
     protected List<StatsDto> get(String path, MultiValueMap<String, String> parameters) {
