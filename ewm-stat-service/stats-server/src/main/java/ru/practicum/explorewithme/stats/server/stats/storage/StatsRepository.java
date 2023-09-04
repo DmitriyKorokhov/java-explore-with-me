@@ -29,7 +29,7 @@ public interface StatsRepository extends JpaRepository<Hit, Long> {
             "WHERE h.timestamp BETWEEN :start AND :end AND h.uri IN :uris " +
             "GROUP BY h.app, h.uri " +
             "ORDER BY COUNT (h.ip) DESC")
-    List<StatsDto> findByDateAndUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
+    List<StatsDto> findByDateAndUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris")List<String> uris);
 
     @Query("SELECT NEW ru.practicum.explorewithme.stats.dto.StatsDto(h.app, h.uri, COUNT (DISTINCT h.ip)) FROM Hit AS h " +
             "WHERE h.timestamp BETWEEN :start AND :end AND h.uri IN :uris " +

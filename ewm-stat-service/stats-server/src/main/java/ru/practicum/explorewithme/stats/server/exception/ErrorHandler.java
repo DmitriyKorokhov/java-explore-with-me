@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
-@Slf4j
 @RestControllerAdvice
+@Slf4j
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
