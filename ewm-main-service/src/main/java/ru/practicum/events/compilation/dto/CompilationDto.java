@@ -9,8 +9,8 @@ import java.util.List;
 @Value
 @Builder
 public class CompilationDto { //Подборка событий
-    private Long id;
     private List<EventShortDto> events;
+    private Long id;
     private boolean pinned; // Закреплена ли подборка на главной странице сайта example: true
     private String title; // Заголовок подборки example: Летние концерты
 }

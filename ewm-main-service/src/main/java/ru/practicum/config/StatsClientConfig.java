@@ -7,7 +7,6 @@ import ru.practicum.explorewithme.stats.client.StatsClient;
 
 @Configuration
 public class StatsClientConfig {
-
     @Value("${ewm-stat-service-url}")
     private String serverUrl;
 

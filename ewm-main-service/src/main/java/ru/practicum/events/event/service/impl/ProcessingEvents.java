@@ -3,7 +3,6 @@ package ru.practicum.events.event.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.events.event.model.Event;
-import ru.practicum.events.event.storage.EventRepository;
 import ru.practicum.events.request.model.Request;
 import ru.practicum.events.request.model.RequestStatus;
 import ru.practicum.events.request.storage.RequestRepository;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProcessingEvents {
 
-    private final EventRepository eventRepository;
     private final RequestRepository requestRepository;
     private final StatsClient client;
 

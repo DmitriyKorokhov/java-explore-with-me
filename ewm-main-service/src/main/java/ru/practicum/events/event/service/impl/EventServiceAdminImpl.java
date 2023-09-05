@@ -24,6 +24,7 @@ import ru.practicum.formatter.DateFormatter;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
     public List<EventFullDto> getAllEventsForAdmin(List<Long> users, List<String> states, List<Long> categories,
                                                    String rangeStart, String rangeEnd, int from, int size, HttpServletRequest request) {
         log.info("Получен запрос на поиск всех событый (администратором)");
-        List<Event> events;
+        List<Event> events = new ArrayList<>();
         LocalDateTime newRangeStart = null;
         if (rangeStart != null) {
             newRangeStart = DateFormatter.formatDate(rangeStart);

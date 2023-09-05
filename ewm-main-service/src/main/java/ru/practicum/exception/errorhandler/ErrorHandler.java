@@ -16,9 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-@Slf4j
 @RestControllerAdvice
+@Slf4j
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.NOT_FOUND)

@@ -16,6 +16,7 @@ import ru.practicum.events.compilation.service.CompilationServiceAdmin;
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/compilations")
 public class CompilationControllerAdmin {
+
     private final CompilationServiceAdmin compilationServiceForAdmin;
 
     // Добавление новой подборки (подборка может не содержать событий)

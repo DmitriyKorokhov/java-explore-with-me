@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.explorewithme.stats.dto.HitDto;
-import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 import ru.practicum.explorewithme.stats.server.hit.model.Hit;
+import ru.practicum.explorewithme.stats.server.formatter.DateFormatter;
 
 import java.time.LocalDateTime;
 

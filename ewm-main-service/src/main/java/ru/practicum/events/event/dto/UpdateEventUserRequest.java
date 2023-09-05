@@ -20,10 +20,10 @@ public class UpdateEventUserRequest { // Данные для изменения 
     private String eventDate; //Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
     private LocationDto location; //Широта и долгота места проведения события
     private Boolean paid; // Новое значение флага о платности мероприятия
-    @PositiveOrZero
+    @PositiveOrZero(message = "ParticipantLimit пользователей не может быть отрицательным")
     private Integer participantLimit; // Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
     private Boolean requestModeration; // Нужна ли пре-модерация заявок на участие
     private ActionStateDto stateAction;
     @Size(min =3, max = 120, message = "Минимальное кол-во символов для нового заголовка - 3, максимальное - 120")
-    private String title; // Новый заголовок
+    private String title; // example: Знаменитое шоу 'Летающая кукуруза' Заголовок
 }

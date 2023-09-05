@@ -13,7 +13,7 @@ public class DateFormatter {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     public static LocalDateTime formatDate(String date) {
-        LocalDateTime newDate;
+        LocalDateTime newDate = null;
         if (date == null) {
             throw new ValidationDateException("Дата должна быть задана");
         }

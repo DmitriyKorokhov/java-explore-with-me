@@ -2,10 +2,8 @@ package ru.practicum.explorewithme.stats.server.stats.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.stats.dto.StatsDto;
 import ru.practicum.explorewithme.stats.server.stats.service.StatsService;
 
@@ -16,14 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/stats")
 public class StatsController {
-    private final StatsService statsService;
+
+    private final StatsService service;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<StatsDto> getStats(@RequestParam String start,
                                    @RequestParam String end,
                                    @RequestParam(required = false) List<String> uris,
                                    @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Получение статистики по посещениям");
-        return statsService.getStats(start, end, uris, unique);
+        return service.getStats(start, end, uris, unique);
     }
 }

@@ -13,10 +13,10 @@ import java.util.List;
 
 @Slf4j
 @Validated
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping(path = "/compilations")
-public class CompilationControllerPublic { // Публичный API для работы с подборками событий
+public class CompilationControllerPublic { // Получение подборок событий
 
     private final CompilationServicePublic compilationService;
 

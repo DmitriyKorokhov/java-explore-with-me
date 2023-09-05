@@ -49,7 +49,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                        @Param("from") Integer from,
                                        @Param("size") Integer size);
 
-    @Query(value = "SELECT * FROM events " +
+    @Query(value = "SELECT * FROM events  " +
             "WHERE (lower(annotation) LIKE '%'||lower(:text)||'%' OR lower(description) LIKE '%'||lower(:text)||'%') " +
             "AND (category_id IN :categories  OR :categories IS NULL) " +
             "AND (:paid IS NULL OR paid = :paid) " +

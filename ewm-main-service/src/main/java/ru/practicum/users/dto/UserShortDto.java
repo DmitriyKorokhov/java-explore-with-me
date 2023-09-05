@@ -6,6 +6,6 @@ import lombok.Value;
 @Value
 @Builder
 public class UserShortDto {
-    private Long id;
-    private String name;
+    public Long id;
+    public String name;
 }

@@ -8,7 +8,8 @@ import ru.practicum.users.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,7 +48,7 @@ public class Event { // События
     @Enumerated(EnumType.STRING)
     private EventState state; // example: PUBLISHED, Список состояний жизненного цикла события
     @Column(name = "title", unique = true)
-    private String title; // Заголовок
+    private String title; // example: Знаменитое шоу 'Летающая кукуруза' Заголовок
     @Transient
-    private Long views; // Количество просмотрев события
+    private Long views; // Количество просмотров события
 }

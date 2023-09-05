@@ -25,7 +25,7 @@ public class Hit {
     private String uri; // URI для которого был осуществлен запрос  /events/1
     @Column(name = "ip")
     @NotBlank(message = "Ip у Hit не должно быть пустым")
-    private String ip; //IP-адрес пользователя, осуществившего запрос
+    private String ip; // IP-адрес пользователя, осуществившего запрос
     @Column(name = "time_stamp")
     @NotNull(message = "Time stamp у Hit должен существовать")
     private LocalDateTime timestamp; // Дата и время, когда был совершен запрос к эндпоинту (в формате "yyyy-MM-dd HH:mm:ss")

@@ -30,7 +30,6 @@ import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictRequestException;
 import ru.practicum.exception.ForbiddenEventException;
 import ru.practicum.exception.ResourceNotFoundException;
-import ru.practicum.explorewithme.stats.client.StatsClient;
 import ru.practicum.users.model.User;
 import ru.practicum.findobject.FindObjectInRepository;
 import ru.practicum.formatter.DateFormatter;
@@ -51,7 +50,6 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     private final FindObjectInRepository findObjectInRepository;
     private final RequestRepository requestRepository;
     private final ProcessingEvents processingEvents;
-    private final StatsClient client;
 
     @Override
     public List<EventShortDto> getAllPrivateEventsByUserId(Long userId, int from, int size, HttpServletRequest request) {

@@ -13,6 +13,6 @@ public class NewCompilationDto { // Подборка событий
     private List<Long> events;
     private boolean pinned; // Закреплена ли подборка на главной странице сайта example: true
     @Size(max = 50, min = 1, message = "Максимальное кол-во символов для заголовка подборки - 50, минимальное - 1")
-    @NotBlank(message = "title не может быть пустым")
-    private String title; // заголовок подборки
+    @NotBlank(message = "Title не может быть пустым")
+    private String title; // Заголовок подборки example: Летние концерты
 }

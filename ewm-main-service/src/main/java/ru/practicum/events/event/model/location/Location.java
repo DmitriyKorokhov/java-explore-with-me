@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Embeddable;
 
 @Data
-@Builder
-@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Embeddable
 public class Location {
     private float lat; // example: 55.754167 - Широта
     private float lon; // example: 37.62 - Долгота

@@ -2,7 +2,6 @@ package ru.practicum.events.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,19 +29,19 @@ public class EventControllerPrivate {
 
     private final EventServicePrivate eventServicePrivate;
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    EventFullDto addPrivateEventByUserId(@PathVariable Long userId,
-                                         @Validated @RequestBody NewEventDto newEventDto) {
-        return eventServicePrivate.addPrivateEventByUserId(userId, newEventDto);
-    }
-
     @GetMapping()
     List<EventShortDto> getAllPrivateEventsByUser(@PathVariable Long userId,
                                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                   @Positive @RequestParam(defaultValue = "10") Integer size,
                                                   HttpServletRequest request) {
         return eventServicePrivate.getAllPrivateEventsByUserId(userId, from, size, request);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    EventFullDto addPrivateEventByUserId(@PathVariable Long userId,
+                                         @Validated @RequestBody NewEventDto newEventDto) {
+        return eventServicePrivate.addPrivateEventByUserId(userId, newEventDto);
     }
 
     @GetMapping("/{eventId}")
