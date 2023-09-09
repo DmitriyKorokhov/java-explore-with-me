@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class StatsClient extends BaseClient {
 
-    private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -54,14 +54,14 @@ public class StatsClient extends BaseClient {
     private Map<String, Object> getStatsParameters(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (uris == null) {
             return Map.of(
-                    "start", start.format(DATE_FORMATTER),
-                    "end", end.format(DATE_FORMATTER),
+                    "start", start.format(dateTimeFormatter),
+                    "end", end.format(dateTimeFormatter),
                     "unique", unique
             );
         } else {
             return Map.of(
-                    "start", start.format(DATE_FORMATTER),
-                    "end", end.format(DATE_FORMATTER),
+                    "start", start.format(dateTimeFormatter),
+                    "end", end.format(dateTimeFormatter),
                     "unique", unique,
                     "uris", String.join(", ", uris)
             );
