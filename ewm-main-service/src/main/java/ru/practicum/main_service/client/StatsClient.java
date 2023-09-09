@@ -19,6 +19,8 @@ import java.util.Map;
 @Slf4j
 public class StatsClient extends BaseClient {
 
+    private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
@@ -50,7 +52,6 @@ public class StatsClient extends BaseClient {
     }
 
     private Map<String, Object> getStatsParameters(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (uris == null) {
             return Map.of(
                     "start", start.format(DATE_FORMATTER),
@@ -66,5 +67,4 @@ public class StatsClient extends BaseClient {
             );
         }
     }
-
 }
