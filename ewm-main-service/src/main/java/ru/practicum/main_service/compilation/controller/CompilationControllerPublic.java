@@ -2,6 +2,7 @@ package ru.practicum.main_service.compilation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.compilation.dto.CompilationDto;
@@ -22,12 +23,14 @@ public class CompilationControllerPublic {
     private final CompilationServicePublic compilationService;
 
     @GetMapping("/{compId}")
+    @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@PathVariable Long compId) {
         log.info("Получен запрос на поиск подборки событий по id= {}", compId);
         return compilationService.getCompilationById(compId);
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<CompilationDto> getAllCompilations(
             @RequestParam(required = false) Boolean pinned,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,

@@ -3,6 +3,7 @@ package ru.practicum.main_service.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.event.dto.EventFullDto;
@@ -27,6 +28,7 @@ public class EventControllerPublic {
     private final EventServicePublic eventService;
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public EventFullDto getPublicEventById(@PathVariable Long id,
                                  HttpServletRequest request) {
         log.info("Получен запрос на получение события по id= {} (публичный)", id);
@@ -34,6 +36,7 @@ public class EventControllerPublic {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllPublicEvents(
             @RequestParam(required = false) String text,
             @RequestParam(required = false) List<Long> categories,

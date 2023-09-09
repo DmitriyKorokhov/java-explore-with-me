@@ -32,6 +32,7 @@ public class UserControllerAdmin {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getAllUsersByIds(
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,

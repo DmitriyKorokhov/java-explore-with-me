@@ -28,7 +28,16 @@ public class EventControllerPrivate {
     private final EventServicePrivate eventService;
     private final RequestServicePrivate requestServicePrivate;
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventFullDto addPrivateEventByUserId(@PathVariable Long userId,
+                                                @Valid @RequestBody NewEventDto newEventDto) {
+        log.info("Получен запрос на добавление события пользователем с id= {} (приватный)", userId);
+        return eventService.addPrivateEventByUserId(userId, newEventDto);
+    }
+
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllPrivateEventsByUserId(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
@@ -37,15 +46,8 @@ public class EventControllerPrivate {
         return eventService.getAllPrivateEventsByUserId(userId, EwmPageRequest.of(from, size));
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto addPrivateEventByUserId(@PathVariable Long userId,
-                                    @Valid @RequestBody NewEventDto newEventDto) {
-        log.info("Получен запрос на добавление события пользователем с id= {} (приватный)", userId);
-        return eventService.addPrivateEventByUserId(userId, newEventDto);
-    }
-
     @GetMapping("/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
     public EventFullDto getPrivateEventByIdAndByUserId(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -54,6 +56,7 @@ public class EventControllerPrivate {
     }
 
     @PatchMapping("/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
     public EventFullDto updatePrivateEventByIdAndByUserId(
             @PathVariable Long userId,
             @PathVariable Long eventId,
@@ -63,6 +66,7 @@ public class EventControllerPrivate {
     }
 
     @GetMapping("/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAllPrivateEventsByRequests(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -71,6 +75,7 @@ public class EventControllerPrivate {
     }
 
     @PatchMapping("/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusUpdateResult updateEventRequestStatus(
             @PathVariable Long userId,
             @PathVariable Long eventId,

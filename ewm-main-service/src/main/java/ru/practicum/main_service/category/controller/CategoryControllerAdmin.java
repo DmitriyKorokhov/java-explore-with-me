@@ -33,6 +33,7 @@ public class CategoryControllerAdmin {
     }
 
     @PatchMapping("/{catId}")
+    @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateCategory(@PathVariable long catId,
                              @Valid @RequestBody CategoryDto categoryDto) {
         log.info("Запрос на обновлении категории c id= {}", catId);
