@@ -2,6 +2,7 @@ package ru.practicum.main_service.request.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.main_service.event.dto.RequestStats;
 import ru.practicum.main_service.request.model.Request;
 import ru.practicum.main_service.request.model.RequestStatus;
@@ -22,8 +23,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Query("SELECT new ru.practicum.main_service.event.dto.RequestStats(r.event.id, count(r.id)) " +
             "FROM Request AS r " +
-            "WHERE r.event.id IN ?1 " +
+            "WHERE r.event.id IN (:eventsId) " +
             "AND r.status = 'CONFIRMED' " +
             "GROUP BY r.event.id")
-    List<RequestStats> findConfirmedRequests(List<Long> eventsId);
+    List<RequestStats> findConfirmedRequests(@Param("eventsId") List<Long> eventsId);
 }

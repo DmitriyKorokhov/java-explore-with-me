@@ -21,7 +21,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByCategoryId(long catId);
 
 
-    @Query("SELECT e FROM Event e " +
+    @Query("SELECT e FROM Event AS e " +
             "WHERE (COALESCE(:userIds, NULL) IS NULL OR e.initiator.id IN :userIds) " +
             "AND (COALESCE(:states, NULL) IS NULL OR e.state IN :states) " +
             "AND (COALESCE(:categoryIds, NULL) IS NULL OR e.category.id IN :categoryIds) " +
@@ -35,17 +35,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                @Param("rangeEnd") LocalDateTime rangeEnd
     );
 
-    @Query("SELECT e FROM Event e " +
+    @Query("SELECT e FROM Event AS e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (COALESCE(:text, NULL) IS NULL OR (LOWER(e.annotation) LIKE LOWER(concat('%', :text, '%')) " +
-            "OR LOWER(e.description) LIKE LOWER(concat('%', :text, '%')))) " +
+            "AND (COALESCE(:text, NULL) IS NULL OR (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%') ))) " +
             "AND (COALESCE(:categoryIds, NULL) IS NULL OR e.category.id IN :categoryIds) " +
             "AND (COALESCE(:paid, NULL) IS NULL OR e.paid = :paid) " +
             "AND (COALESCE(:rangeStart, NULL) IS NULL OR e.eventDate >= :rangeStart) " +
             "AND (COALESCE(:rangeEnd, NULL) IS NULL OR e.eventDate <= :rangeEnd) " +
             "AND (:onlyAvailable = false OR e.id IN " +
             "(SELECT r.event.id " +
-            "FROM Request r " +
+            "FROM Request AS r " +
             "WHERE r.status = 'CONFIRMED' " +
             "GROUP BY r.event.id " +
             "HAVING e.participantLimit - count(id) > 0 " +
