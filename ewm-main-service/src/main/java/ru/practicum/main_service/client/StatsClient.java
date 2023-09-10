@@ -15,8 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-@Service
 @Slf4j
+@Service
 public class StatsClient extends BaseClient {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

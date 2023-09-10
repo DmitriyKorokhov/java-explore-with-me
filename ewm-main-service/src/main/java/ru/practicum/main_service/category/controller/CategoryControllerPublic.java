@@ -14,11 +14,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+@Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
-@Validated
-@Slf4j
 public class CategoryControllerPublic {
 
     private final CategoryServicePublic categoryServicePublic;
