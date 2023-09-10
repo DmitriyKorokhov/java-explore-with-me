@@ -20,7 +20,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findAllByCategoryId(long catId);
 
-
     @Query("SELECT e FROM Event AS e " +
             "WHERE (COALESCE(:userIds, NULL) IS NULL OR e.initiator.id IN :userIds) " +
             "AND (COALESCE(:states, NULL) IS NULL OR e.state IN :states) " +

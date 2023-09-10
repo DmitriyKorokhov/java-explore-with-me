@@ -20,13 +20,13 @@ import java.util.List;
 @RequestMapping("/compilations")
 public class CompilationControllerPublic {
 
-    private final CompilationServicePublic compilationService;
+    private final CompilationServicePublic compilationServicePublic;
 
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@PathVariable Long compId) {
         log.info("Получен запрос на поиск подборки событий по id= {}", compId);
-        return compilationService.getCompilationById(compId);
+        return compilationServicePublic.getCompilationById(compId);
     }
 
     @GetMapping
@@ -36,6 +36,6 @@ public class CompilationControllerPublic {
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Получен запрос поиск всех подборок событий, по условию закрепления {}", pinned);
-        return compilationService.getAllCompilations(pinned, EwmPageRequest.of(from, size));
+        return compilationServicePublic.getAllCompilations(pinned, EwmPageRequest.of(from, size));
     }
 }

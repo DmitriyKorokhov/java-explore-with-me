@@ -19,20 +19,20 @@ import javax.validation.Valid;
 @RequestMapping("/admin/compilations")
 public class CompilationControllerAdmin {
 
-    private final CompilationServiceAdmin compilationService;
+    private final CompilationServiceAdmin compilationServiceAdmin;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto addCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         log.info("Получен запрос на добавление подборки событий {}", newCompilationDto);
-        return compilationService.addCompilation(newCompilationDto);
+        return compilationServiceAdmin.addCompilation(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilationById(@PathVariable Long compId) {
         log.info("Получен запрос на удаление подборки событий по id= {}", compId);
-        compilationService.deleteCompilationById(compId);
+        compilationServiceAdmin.deleteCompilationById(compId);
     }
 
     @PatchMapping("/{compId}")
@@ -40,6 +40,6 @@ public class CompilationControllerAdmin {
     public CompilationDto updateCompilationById(@PathVariable Long compId,
                                 @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         log.info("Получен запрос на обновление подборки событий по id= {}", compId);
-        return compilationService.updateCompilationById(compId, updateCompilationRequest);
+        return compilationServiceAdmin.updateCompilationById(compId, updateCompilationRequest);
     }
 }

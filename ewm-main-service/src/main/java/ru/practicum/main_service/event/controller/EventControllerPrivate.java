@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/users/{userId}/events")
 public class EventControllerPrivate {
 
-    private final EventServicePrivate eventService;
+    private final EventServicePrivate eventServicePrivate;
     private final RequestServicePrivate requestServicePrivate;
 
     @PostMapping
@@ -33,7 +33,7 @@ public class EventControllerPrivate {
     public EventFullDto addPrivateEventByUserId(@PathVariable Long userId,
                                                 @Valid @RequestBody NewEventDto newEventDto) {
         log.info("Получен запрос на добавление события пользователем с id= {} (приватный)", userId);
-        return eventService.addPrivateEventByUserId(userId, newEventDto);
+        return eventServicePrivate.addPrivateEventByUserId(userId, newEventDto);
     }
 
     @GetMapping
@@ -43,7 +43,7 @@ public class EventControllerPrivate {
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Получен запрос на получение всех событий для пользователя с id= {}  (приватный)", userId);
-        return eventService.getAllPrivateEventsByUserId(userId, EwmPageRequest.of(from, size));
+        return eventServicePrivate.getAllPrivateEventsByUserId(userId, EwmPageRequest.of(from, size));
     }
 
     @GetMapping("/{eventId}")
@@ -52,7 +52,7 @@ public class EventControllerPrivate {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         log.info("Получен запрос на получение события с id= {} для пользователя с id= {} (приватный)", eventId, userId);
-        return eventService.getPrivateEventByIdAndByUserId(userId, eventId);
+        return eventServicePrivate.getPrivateEventByIdAndByUserId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
@@ -62,7 +62,7 @@ public class EventControllerPrivate {
             @PathVariable Long eventId,
             @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
         log.info("Получен запрос на обновление события с id= {} для пользователя с id= {} (приватный)", eventId, userId);
-        return eventService.updatePrivateEventByIdAndByUserId(userId, eventId, updateEventUserRequest);
+        return eventServicePrivate.updatePrivateEventByIdAndByUserId(userId, eventId, updateEventUserRequest);
     }
 
     @GetMapping("/{eventId}/requests")

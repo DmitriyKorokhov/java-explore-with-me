@@ -35,7 +35,7 @@ public class RequestControllerPrivate {
     @PatchMapping("/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public ParticipationRequestDto cancelRequestUserById(@PathVariable Long userId,
-                                                 @PathVariable Long requestId) {
+                                                         @PathVariable Long requestId) {
         log.info("Получен запрос от пользователя с id= {} на отмену запроса с id= {}", userId, requestId);
         return requestServicePrivate.cancelRequestUserById(userId, requestId);
     }

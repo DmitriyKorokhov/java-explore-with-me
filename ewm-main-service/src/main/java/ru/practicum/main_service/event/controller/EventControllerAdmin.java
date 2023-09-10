@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/admin/events")
 public class EventControllerAdmin {
 
-    private final EventServiceAdmin eventService;
+    private final EventServiceAdmin eventServiceAdmin;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -38,7 +38,7 @@ public class EventControllerAdmin {
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Получен запрос на поиск всех событый (администратором)");
-        return eventService.getAllEventsForAdmin(users, states, categories, rangeStart, rangeEnd, EwmPageRequest.of(from, size));
+        return eventServiceAdmin.getAllEventsForAdmin(users, states, categories, rangeStart, rangeEnd, EwmPageRequest.of(from, size));
     }
 
     @PatchMapping("/{eventId}")
@@ -46,6 +46,6 @@ public class EventControllerAdmin {
     public EventFullDto updateEventById(@PathVariable Long eventId,
                                    @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         log.info("Получен запрос на обновление события с id= {} (администратором)", eventId);
-        return eventService.updateEventById(eventId, updateEventAdminRequest);
+        return eventServiceAdmin.updateEventById(eventId, updateEventAdminRequest);
     }
 }

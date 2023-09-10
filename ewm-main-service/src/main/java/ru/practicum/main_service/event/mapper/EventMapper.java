@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 
 @UtilityClass
 public class EventMapper {
-
     public Event toEvent(NewEventDto newEventDto, User initiator, Category category, Location location, LocalDateTime createdOn, EventState state) {
         return Event.builder()
                 .eventDate(newEventDto.getEventDate())
@@ -33,7 +32,6 @@ public class EventMapper {
                 .annotation(newEventDto.getAnnotation())
                 .build();
     }
-
 
     public EventFullDto toEventFullDto(Event event, Long confirmedRequests, Long views) {
         return EventFullDto.builder()
@@ -61,6 +59,4 @@ public class EventMapper {
                 .views(views)
                 .build();
     }
-
-
 }
