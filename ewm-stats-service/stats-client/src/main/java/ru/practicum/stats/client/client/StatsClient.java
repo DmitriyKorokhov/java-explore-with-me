@@ -32,7 +32,7 @@ public class StatsClient extends BaseClient {
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (start.isAfter(end)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Неверно заданы даты");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
         String path = getStatsPath(uris);
         Map<String, Object> parameters = getStatsParameters(start, end, uris, unique);

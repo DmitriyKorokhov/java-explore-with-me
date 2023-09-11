@@ -23,7 +23,7 @@ public class StatsController {
                                    @RequestParam String end,
                                    @RequestParam(defaultValue = "false") Boolean unique,
                                    @RequestParam(required = false) List<String> uris) {
-        log.info("Получение статистики по посещениям");
+        log.info("Getting statistics on visits");
         return statsService.getStats(start, end, uris, unique);
     }
 }

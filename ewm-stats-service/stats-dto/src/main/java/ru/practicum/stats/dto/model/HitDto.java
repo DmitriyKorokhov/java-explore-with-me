@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class HitDto {
-    @NotBlank(message = "App у Hit не должно быть пустым")
+    @NotBlank(message = "The App should not be empty")
     private String app;
-    @NotBlank(message = "Uri у Hit не должно быть пустым")
+    @NotBlank(message = "The Uri should not be empty")
     private String uri;
-    @NotBlank(message = "Ip у Hit не должно быть пустым")
+    @NotBlank(message = "The Ip should not be empty")
     private String ip;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("timestamp")

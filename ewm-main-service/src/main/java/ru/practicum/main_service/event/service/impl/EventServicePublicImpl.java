@@ -35,7 +35,7 @@ public class EventServicePublicImpl implements EventServicePublic {
     public EventFullDto getPublicEventById(Long eventId, HttpServletRequest request) {
         Event event = eventServicePrivate.getEventById(eventId);
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден");
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
         }
         statsService.addHit(request);
         return toEventFullDto(event);
@@ -68,7 +68,7 @@ public class EventServicePublicImpl implements EventServicePublic {
 
     private void checkStartIsBeforeEnd(LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Неверно заданы даты");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
     }
 }

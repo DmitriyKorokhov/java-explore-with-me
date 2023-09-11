@@ -24,14 +24,14 @@ public class CompilationControllerAdmin {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto addCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
-        log.info("Получен запрос на добавление подборки событий {}", newCompilationDto);
+        log.info("Request to add a collection of events {}", newCompilationDto);
         return compilationServiceAdmin.addCompilation(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilationById(@PathVariable Long compId) {
-        log.info("Получен запрос на удаление подборки событий по id= {}", compId);
+        log.info("Request to delete a collection of events by id = {}", compId);
         compilationServiceAdmin.deleteCompilationById(compId);
     }
 
@@ -39,7 +39,7 @@ public class CompilationControllerAdmin {
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto updateCompilationById(@PathVariable Long compId,
                                 @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
-        log.info("Получен запрос на обновление подборки событий по id= {}", compId);
+        log.info("Request to update a collection of events by id = {}", compId);
         return compilationServiceAdmin.updateCompilationById(compId, updateCompilationRequest);
     }
 }

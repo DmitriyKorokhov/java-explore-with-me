@@ -1,7 +1,6 @@
 package ru.practicum.main_service.compilation.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import ru.practicum.main_service.exception.ValidationException;
 
 import java.util.*;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -41,7 +39,7 @@ public class CompilationServiceAdminImpl implements CompilationServiceAdmin {
     @Transactional
     public CompilationDto updateCompilationById(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = getCompilation(compId);
-        if (updateCompilationRequest.getTitle() != null) {
+        if (updateCompilationRequest.getTitle() != null && !updateCompilationRequest.getTitle().isBlank()) {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
         if (updateCompilationRequest.getPinned() != null) {
@@ -74,12 +72,12 @@ public class CompilationServiceAdminImpl implements CompilationServiceAdmin {
 
     private Compilation getCompilation(Long compId) {
         return compilationRepository.findById(compId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден"));
+                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
     private void checkSize(List<Event> events, List<Long> eventsIdToUpdate) {
         if (events.size() != eventsIdToUpdate.size()) {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден");
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
         }
     }
 }

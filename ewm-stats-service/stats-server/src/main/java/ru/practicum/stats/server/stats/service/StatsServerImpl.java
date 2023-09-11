@@ -34,7 +34,7 @@ public class StatsServerImpl implements StatsService {
 
     private void validDate(LocalDateTime start, LocalDateTime end) {
         if (end.isBefore(start) || start.isAfter(end)) {
-            throw new ValidationDateException("Невенно заданы даты для поиска");
+            throw new ValidationDateException("The dates for the search are set incorrectly");
         }
     }
 }

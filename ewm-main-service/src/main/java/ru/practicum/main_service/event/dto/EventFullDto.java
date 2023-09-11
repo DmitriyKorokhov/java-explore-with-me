@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.*;
 import ru.practicum.main_service.event.model.EventState;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+
+import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
 
 @Data
 @Builder
@@ -14,13 +18,15 @@ import java.time.LocalDateTime;
 public class EventFullDto {
     @JsonUnwrapped
     private EventShortDto eventShortDto;
+    @NotBlank(message = "The Description should not be empty")
     private String description;
     private EventState state;
     private LocationDto location;
+    @PositiveOrZero(message = "The Participant Limit cannot be negative")
     private Integer participantLimit;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime createdOn;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
 }

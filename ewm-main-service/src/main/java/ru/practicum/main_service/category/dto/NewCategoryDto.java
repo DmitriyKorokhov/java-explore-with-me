@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewCategoryDto {
-    @Size(max = 50, min = 1, message = "Максимальное кол-во символов для названия категории - 50, минимальное - 1")
-    @NotBlank(message = "Поле name не должно быть пустым")
+    @Size(max = 50, min = 1, message = "The maximum number of characters for the category name is 50, the minimum is 1")
+    @NotBlank(message = "The name should not be empty")
     private String name;
 }

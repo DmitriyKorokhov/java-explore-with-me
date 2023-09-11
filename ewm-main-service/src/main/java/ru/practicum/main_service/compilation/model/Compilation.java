@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.main_service.event.model.Event;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -19,9 +21,11 @@ public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
+    @NotBlank(message = "The Title cannot be empty")
     private String title;
-    @Column(name = "pinned", nullable = false)
+    @Column(name = "pinned")
+    @NotNull(message = "Pinned must exist")
     private Boolean pinned;
     @ManyToMany
     @JoinTable(name = "compilations_events",

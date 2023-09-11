@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -16,6 +17,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name", unique = true)
-    @NotBlank(message = "Поле name не должно быть пустым")
+    @NotBlank(message = "The name should not be empty")
     private String name;
 }

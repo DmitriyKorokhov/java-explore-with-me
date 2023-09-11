@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocationDto {
-    @NotNull(message = "Latitude должен существовать")
+    @NotNull(message = "Latitude must exist")
     private Float lat;
-    @NotNull(message = "Longitude должен существовать")
+    @NotNull(message = "Longitude must exist")
     private Float lon;
 }

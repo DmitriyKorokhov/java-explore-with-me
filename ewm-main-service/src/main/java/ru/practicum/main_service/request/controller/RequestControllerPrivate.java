@@ -21,14 +21,14 @@ public class RequestControllerPrivate {
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto addRequestEventById(@PathVariable Long userId,
                                                        @RequestParam Long eventId) {
-        log.info("Получен запрос на добавление запроса от пользователя с id= {} для события с id= {}", userId, eventId);
+        log.info("Request to add a request from a user with id = {} for an event with id = {}", userId, eventId);
         return requestServicePrivate.addRequestEventById(userId, eventId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getAllRequestsUserById(@PathVariable Long userId) {
-        log.info("Получен запрос на получение всех запросов пользователя с id= " + userId);
+        log.info("Request to receive all user requests with id = {}", userId);
         return requestServicePrivate.getAllRequestsUserById(userId);
     }
 
@@ -36,7 +36,7 @@ public class RequestControllerPrivate {
     @ResponseStatus(HttpStatus.OK)
     public ParticipationRequestDto cancelRequestUserById(@PathVariable Long userId,
                                                          @PathVariable Long requestId) {
-        log.info("Получен запрос от пользователя с id= {} на отмену запроса с id= {}", userId, requestId);
+        log.info("Request from a user with id = {} to cancel a request with id = {}", userId, requestId);
         return requestServicePrivate.cancelRequestUserById(userId, requestId);
     }
 }

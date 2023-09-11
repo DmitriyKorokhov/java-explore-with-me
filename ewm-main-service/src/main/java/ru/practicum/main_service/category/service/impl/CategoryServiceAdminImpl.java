@@ -1,7 +1,6 @@
 package ru.practicum.main_service.category.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.category.dto.CategoryDto;
@@ -13,7 +12,6 @@ import ru.practicum.main_service.category.storage.CategoryRepository;
 import ru.practicum.main_service.event.storage.EventRepository;
 import ru.practicum.main_service.exception.ConflictException;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,7 +25,7 @@ public class CategoryServiceAdminImpl implements CategoryServiceAdmin {
     @Transactional
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
         if (categoryRepository.findByName(newCategoryDto.getName()) != null) {
-            throw new ConflictException("Категория с таким именем уже существует");
+            throw new ConflictException("A category with that name already exists");
         }
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.newCategoryDtoToCategory(newCategoryDto)));
     }
@@ -37,10 +35,10 @@ public class CategoryServiceAdminImpl implements CategoryServiceAdmin {
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
         categoryServicePublic.getCategoryById(catId);
         if (categoryRepository.findByName(categoryDto.getName(), catId) != null) {
-            throw new ConflictException("Категория с таким именем уже существует");
+            throw new ConflictException("A category with that name already exists");
         }
         categoryDto.setId(catId);
-        return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.categoryDtoToCategory(categoryDto)));
+        return CategoryMapper.toCategoryDto(CategoryMapper.categoryDtoToCategory(categoryDto));
     }
 
     @Override
@@ -48,7 +46,7 @@ public class CategoryServiceAdminImpl implements CategoryServiceAdmin {
     public void deleteCategoryById(Long catId) {
         categoryServicePublic.getCategoryById(catId);
         if (!eventRepository.findAllByCategoryId(catId).isEmpty()) {
-            throw new ConflictException("Ошибка при удалении категории. Категория содержит события");
+            throw new ConflictException("Error when deleting a category. The category contains events");
         }
         categoryRepository.deleteById(catId);
     }

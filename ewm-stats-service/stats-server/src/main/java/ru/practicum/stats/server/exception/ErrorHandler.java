@@ -14,7 +14,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationDateException(final ValidationDateException e) {
-        log.info("Неверно задана временная характеристика", HttpStatus.BAD_REQUEST);
+        log.info("The date and time are set incorrectly", HttpStatus.BAD_REQUEST);
         return Map.of("Bad Request", e.getMessage());
     }
 }

@@ -25,7 +25,7 @@ public class CompilationControllerPublic {
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@PathVariable Long compId) {
-        log.info("Получен запрос на поиск подборки событий по id= {}", compId);
+        log.info("Request to search for a collection of events by id = {}", compId);
         return compilationServicePublic.getCompilationById(compId);
     }
 
@@ -35,7 +35,7 @@ public class CompilationControllerPublic {
             @RequestParam(required = false) Boolean pinned,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("Получен запрос поиск всех подборок событий, по условию закрепления {}", pinned);
+        log.info("Request to search for all collections of events, by pinning condition {}", pinned);
         return compilationServicePublic.getAllCompilations(pinned, EwmPageRequest.of(from, size));
     }
 }

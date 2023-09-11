@@ -21,7 +21,7 @@ public class HitController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Hit addHit(@Valid @RequestBody HitDto endpointHit) {
-        log.info("Сохранение информации о том, что к эндпоинту был запрос");
+        log.info("Saving information that there was a request to the endpoint");
         return hitService.addHit(endpointHit);
     }
 }

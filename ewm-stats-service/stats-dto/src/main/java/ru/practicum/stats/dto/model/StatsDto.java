@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StatsDto {
-    @NotBlank(message = "App у Stats не должно быть пустым")
+    @NotBlank(message = "The App should not be empty")
     private String app;
-    @NotBlank(message = "Uri у Stats не должно быть пустым")
+    @NotBlank(message = "The Uri should not be empty")
     private String uri;
     private long hits;
 }

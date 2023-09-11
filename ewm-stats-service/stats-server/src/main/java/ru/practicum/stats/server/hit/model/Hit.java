@@ -18,15 +18,15 @@ public class Hit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "app")
-    @NotBlank(message = "App не должно быть пустым")
+    @NotBlank(message = "The App should not be empty")
     private String app;
     @Column(name = "uri")
-    @NotBlank(message = "Uri не должно быть пустым")
+    @NotBlank(message = "The Uri should not be empty")
     private String uri;
     @Column(name = "ip")
-    @NotBlank(message = "Ip не должно быть пустым")
+    @NotBlank(message = "The Ip should not be empty")
     private String ip;
     @Column(name = "time_stamp")
-    @NotNull(message = "Time stamp должен существовать")
+    @NotNull(message = "The Time Stamp must exist")
     private LocalDateTime timestamp;
 }

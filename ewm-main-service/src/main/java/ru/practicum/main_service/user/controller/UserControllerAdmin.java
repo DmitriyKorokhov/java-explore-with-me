@@ -27,7 +27,7 @@ public class UserControllerAdmin {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto addUser(@Valid @RequestBody NewUserRequest newUserRequest) {
-        log.info("Получен запрос на добавление пользователя {}", newUserRequest);
+        log.info("Request to add a user {}", newUserRequest);
         return userServiceAdmin.addUser(newUserRequest);
     }
 
@@ -37,14 +37,14 @@ public class UserControllerAdmin {
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("Получен запрос на получение всех пользователей по id");
+        log.info("Request to get all users by id");
         return userServiceAdmin.getAllUsersByIds(ids, EwmPageRequest.of(from, size));
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable Long userId) {
-        log.info("Получен запрос на удаления пользователя  по id= {}", userId);
+        log.info("Request to delete a user by id= {}", userId);
         userServiceAdmin.deleteUserById(userId);
     }
 }

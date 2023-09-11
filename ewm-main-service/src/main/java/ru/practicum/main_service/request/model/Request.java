@@ -7,6 +7,7 @@ import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.user.model.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,9 +28,11 @@ public class Request {
     @JoinColumn(name = "requester_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User requester;
-    @Column(name = "created", nullable = false)
+    @Column(name = "created")
+    @NotNull(message = "The time Created must exist")
     private LocalDateTime created;
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
+    @NotNull(message = "The Status must exist")
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 }

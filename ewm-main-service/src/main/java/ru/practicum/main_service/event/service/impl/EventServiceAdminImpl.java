@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
 import ru.practicum.main_service.event.dto.*;
 import ru.practicum.main_service.event.mapper.EventMapper;
@@ -49,14 +50,14 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
     public EventFullDto updateEventById(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         checkNewEventDate(updateEventAdminRequest.getEventDate(), LocalDateTime.now().plusHours(1));
         Event event = eventServicePrivate.getEventById(eventId);
-        if (updateEventAdminRequest.getAnnotation() != null) {
+        if (updateEventAdminRequest.getAnnotation() != null && !updateEventAdminRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateEventAdminRequest.getAnnotation());
         }
-        if (updateEventAdminRequest.getDescription() != null) {
+        if (updateEventAdminRequest.getDescription() != null && !updateEventAdminRequest.getDescription().isBlank()) {
             event.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
-            event.setCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory()));
+            event.setCategory(CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory())));
         }
         if (updateEventAdminRequest.getEventDate() != null) {
             event.setEventDate(updateEventAdminRequest.getEventDate());
@@ -77,7 +78,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
         }
         if (updateEventAdminRequest.getStateAction() != null) {
             if (!event.getState().equals(EventState.PENDING)) {
-                throw new ConflictException("Событие не находится в статусе ожидания");
+                throw new ConflictException("The event is not in the waiting status");
             }
             if (updateEventAdminRequest.getStateAction() == EventStateAction.PUBLISH_EVENT) {
                 event.setState(EventState.PUBLISHED);
@@ -86,7 +87,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
                 event.setState(EventState.CANCELED);
             }
         }
-        if (updateEventAdminRequest.getTitle() != null) {
+        if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
         return toEventFullDto(eventRepository.save(event));
@@ -115,19 +116,19 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
 
     private void checkStartIsBeforeEnd(LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Неверно заданы даты");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
     }
 
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Время не может быть раньше, чем через два часа от текущего момента");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }
 
     private void checkIsNewLimitNotLessOld(Integer newLimit, Long eventParticipantLimit) {
         if (newLimit != 0 && eventParticipantLimit != 0 && (newLimit < eventParticipantLimit)) {
-            throw new ConflictException("Лимит уже достигнут");
+            throw new ConflictException("The limit has already been reached");
         }
     }
 }

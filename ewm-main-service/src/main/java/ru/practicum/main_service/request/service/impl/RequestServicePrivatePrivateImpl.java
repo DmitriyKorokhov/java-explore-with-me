@@ -70,7 +70,7 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
     public ParticipationRequestDto cancelRequestUserById(Long userId, Long requestId) {
         userServiceAdmin.getUser(userId);
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден"));
+                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
         checkUserIsOwner(request.getRequester().getId(), userId);
         request.setStatus(RequestStatus.CANCELED);
         return RequestMapper.toParticipationRequestDto(requestRepository.save(request));
@@ -121,23 +121,23 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
 
     private void checkRequests(List<Request> requests, List<Long> requestIds) {
         if (requests.size() != requestIds.size()) {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден");
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
         }
         if (!requests.stream().map(Request::getStatus).allMatch(RequestStatus.PENDING::equals)) {
-            throw new ConflictException("Заявка не находится в статусе ожидания");
+            throw new ConflictException("The application is not in the waiting status");
         }
     }
 
     private void checkEvent(Event event, Long userId) {
         if (Objects.equals(event.getInitiator().getId(), userId)) {
-            throw new ConflictException("Заявка на участие в своем же событии");
+            throw new ConflictException("Application for participation in your own event");
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("Запрос на неопубликованное событие");
+            throw new ConflictException("Request for an unpublished event");
         }
         Optional<Request> oldRequest = requestRepository.findByEventIdAndRequesterId(event.getId(), userId);
         if (oldRequest.isPresent()) {
-            throw new ConflictException("Повторный запрос");
+            throw new ConflictException("Repeat request");
         }
         checkEventLimit(statsService.getConfirmedRequests(List.of(event)).getOrDefault(event.getId(), 0L) + 1,
                 event.getParticipantLimit()
@@ -157,13 +157,13 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
 
     private void checkEventLimit(Long newLimit, Integer eventLimit) {
         if (eventLimit != 0 && (newLimit > eventLimit)) {
-            throw new ConflictException("Превышен лимит");
+            throw new ConflictException("Exceeded the limit");
         }
     }
 
     private void checkUserIsOwner(Long id, Long userId) {
         if (!Objects.equals(id, userId)) {
-            throw new ConflictException("Пользователь не является владельцем");
+            throw new ConflictException("The user is not the owner");
         }
     }
 }

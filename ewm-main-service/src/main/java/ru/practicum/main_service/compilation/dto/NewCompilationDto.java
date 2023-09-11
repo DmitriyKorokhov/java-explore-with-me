@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class NewCompilationDto {
     private List<Long> events = new ArrayList<>();
-    @Size(max = 50, min = 1, message = "Максимальное кол-во символов для заголовка подборки - 50, минимальное - 1")
-    @NotBlank(message = "Title не может быть пустым")
+    @Size(max = 50, min = 1, message = "The maximum number of characters for the title is 50, the minimum is 1")
+    @NotBlank(message = "The Title can not be empty")
     private String title;
     private Boolean pinned = false;
 }

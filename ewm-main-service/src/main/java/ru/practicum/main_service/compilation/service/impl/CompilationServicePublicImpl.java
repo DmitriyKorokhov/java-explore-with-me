@@ -1,7 +1,6 @@
 package ru.practicum.main_service.compilation.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import ru.practicum.main_service.exception.ValidationException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -65,6 +63,6 @@ public class CompilationServicePublicImpl implements CompilationServicePublic {
 
     private Compilation getCompilation(Long compId) {
         return compilationRepository.findById(compId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден"));
+                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 }

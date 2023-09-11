@@ -15,11 +15,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
+
 @Slf4j
 @Service
 public class StatsClient extends BaseClient {
-
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -32,12 +32,12 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> postHit(HitDto hitDto) {
-        log.info("Запрос на сохранение информации по эндпойнту");
+        log.info("Request to save information on the endpoint");
         return post("/hit", hitDto);
     }
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        log.info("Запрос на получение статистики");
+        log.info("Request for statistics");
         String path = getStatsPath(uris);
         Map<String, Object> parameters = getStatsParameters(start, end, uris, unique);
         return get(path, parameters);
@@ -52,6 +52,7 @@ public class StatsClient extends BaseClient {
     }
 
     private Map<String, Object> getStatsParameters(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         if (uris == null) {
             return Map.of(
                     "start", start.format(dateTimeFormatter),

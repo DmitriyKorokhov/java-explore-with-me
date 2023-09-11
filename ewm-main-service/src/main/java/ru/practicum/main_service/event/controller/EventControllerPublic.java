@@ -18,6 +18,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
+
 @Slf4j
 @Validated
 @RestController
@@ -29,26 +31,26 @@ public class EventControllerPublic {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getPublicEventById(@PathVariable Long id,
-                                 HttpServletRequest request) {
-        log.info("Получен запрос на получение события по id= {} (публичный)", id);
+    public EventFullDto getPublicEventById(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Request to receive an event by id = {} (public)", id);
         return eventService.getPublicEventById(id, request);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getAllPublicEvents(
-            @RequestParam(required = false) String text,
-            @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) Boolean paid,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(required = false) EventSortType sort,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size,
-            HttpServletRequest request) {
-        log.info("Получен запрос на получение всех событий (публичный)");
+    public List<EventShortDto> getAllPublicEvents(@RequestParam(required = false) String text,
+                                                  @RequestParam(required = false) List<Long> categories,
+                                                  @RequestParam(required = false) Boolean paid,
+                                                  @RequestParam(required = false)
+                                                      @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
+                                                  @RequestParam(required = false)
+                                                      @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeEnd,
+                                                  @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+                                                  @RequestParam(required = false) EventSortType sort,
+                                                  @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                  @RequestParam(defaultValue = "10") @Positive Integer size,
+                                                  HttpServletRequest request) {
+        log.info("Request to receive all events (public)");
         return eventService.getAllPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
                 sort, EwmPageRequest.of(from, size), request);
     }

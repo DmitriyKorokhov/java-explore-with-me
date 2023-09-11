@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.model.Category;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
 import ru.practicum.main_service.event.dto.*;
@@ -58,7 +59,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
         checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
         User eventUser = userServiceAdmin.getUser(userId);
-        Category eventCategory = categoryService.getCategoryById(newEventDto.getCategory());
+        Category eventCategory = CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
         Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
         Event newEvent = EventMapper.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
                 EventState.PENDING);
@@ -73,15 +74,15 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         userServiceAdmin.getUser(userId);
         Event event = getEventByIdAndInitiatorId(eventId, userId);
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("Нельзя изменять опубликованные события");
+            throw new ConflictException("You cannot change published events");
         }
-        if (updateEventUserRequest.getAnnotation() != null) {
+        if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory()));
+            event.setCategory(CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
         }
-        if (updateEventUserRequest.getDescription() != null) {
+        if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
             event.setDescription(updateEventUserRequest.getDescription());
         }
         if (updateEventUserRequest.getEventDate() != null) {
@@ -109,7 +110,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
                     break;
             }
         }
-        if (updateEventUserRequest.getTitle() != null) {
+        if (updateEventUserRequest.getTitle() != null  && !updateEventUserRequest.getTitle().isBlank()) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
         return toEventFullDto(eventRepository.save(event));
@@ -118,7 +119,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     @Override
     public Event getEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден"));
+                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
     @Override
@@ -158,7 +159,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     private Event getEventByIdAndInitiatorId(Long eventId, Long userId) {
         return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Ресурс не найден"));
+                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
     }
 
     private Location getOrSaveLocation(LocationDto locationDto) {
@@ -167,21 +168,9 @@ public class EventServicePrivateImpl implements EventServicePrivate {
                 .orElseGet(() -> locationRepository.save(newLocation));
     }
 
-    private void checkStartIsBeforeEnd(LocalDateTime rangeStart, LocalDateTime rangeEnd) {
-        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Неверно заданы даты");
-        }
-    }
-
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
-            throw new ValidationException(HttpStatus.BAD_REQUEST, "Время не может быть раньше, чем через два часа от текущего момента");
-        }
-    }
-
-    private void checkIsNewLimitNotLessOld(Integer newLimit, Long eventParticipantLimit) {
-        if (newLimit != 0 && eventParticipantLimit != 0 && (newLimit < eventParticipantLimit)) {
-            throw new ConflictException("Лимит уже достигнут");
+            throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }
 }

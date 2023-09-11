@@ -25,17 +25,16 @@ public class CategoryControllerPublic {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDto> getAllCategory(
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
-        log.info("Запрос на поиск всех категорий");
+    public List<CategoryDto> getAllCategory(@RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                            @RequestParam(defaultValue = "10") @Positive Integer size) {
+        log.info("Search query for all categories");
         return categoryServicePublic.getAllCategory(EwmPageRequest.of(from, size));
     }
 
     @GetMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategoryById(@PathVariable Long catId) {
-        log.info("Запрос на поиск категории по id= {}", catId);
-        return CategoryMapper.toCategoryDto(categoryServicePublic.getCategoryById(catId));
+        log.info("Request to search for a category by id = {}", catId);
+        return categoryServicePublic.getCategoryById(catId);
     }
 }
