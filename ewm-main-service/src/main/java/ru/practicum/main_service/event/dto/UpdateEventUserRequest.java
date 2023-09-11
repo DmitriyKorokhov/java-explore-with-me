@@ -5,7 +5,6 @@ import lombok.*;
 import ru.practicum.main_service.event.model.EventStateAction;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;

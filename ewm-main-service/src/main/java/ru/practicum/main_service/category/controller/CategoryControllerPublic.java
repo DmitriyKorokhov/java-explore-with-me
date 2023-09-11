@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.category.dto.CategoryDto;
-import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
 import ru.practicum.main_service.parameters.EwmPageRequest;
 
