@@ -97,7 +97,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
         Map<Long, Long> views = statsService.getViews(events);
         Map<Long, Long> confirmedRequests = statsService.getConfirmedRequests(events);
         return events.stream()
-                .map((event) -> EventMapper.toEventFullDto(
+                .map((event) -> EventMapper.INSTANCE.toEventFullDto(
                         event,
                         confirmedRequests.getOrDefault(event.getId(), 0L),
                         views.getOrDefault(event.getId(), 0L)))

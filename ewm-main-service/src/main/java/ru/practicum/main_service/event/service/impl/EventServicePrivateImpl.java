@@ -61,7 +61,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         User eventUser = userServiceAdmin.getUser(userId);
         Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
         Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
-        Event newEvent = EventMapper.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
+        Event newEvent = EventMapper.INSTANCE.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
                 EventState.PENDING);
         Event ev = eventRepository.save(newEvent);
         return toEventFullDto(ev);
@@ -135,7 +135,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         Map<Long, Long> views = statsService.getViews(events);
         Map<Long, Long> confirmedRequests = statsService.getConfirmedRequests(events);
         return events.stream()
-                .map((event) -> EventMapper.toEventShortDto(
+                .map((event) -> EventMapper.INSTANCE.toEventShortDto(
                         event,
                         confirmedRequests.getOrDefault(event.getId(), 0L),
                         views.getOrDefault(event.getId(), 0L)))
@@ -146,7 +146,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         Map<Long, Long> views = statsService.getViews(events);
         Map<Long, Long> confirmedRequests = statsService.getConfirmedRequests(events);
         return events.stream()
-                .map((event) -> EventMapper.toEventFullDto(
+                .map((event) -> EventMapper.INSTANCE.toEventFullDto(
                         event,
                         confirmedRequests.getOrDefault(event.getId(), 0L),
                         views.getOrDefault(event.getId(), 0L)))
