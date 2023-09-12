@@ -32,18 +32,18 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
         if (userRepository.findByName(newUserRequest.getName()) != null) {
             throw new ConflictException("A user with this name already exists");
         }
-        return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(newUserRequest)));
+        return UserMapper.INSTANCE.toUserDto(userRepository.save(UserMapper.INSTANCE.toUser(newUserRequest)));
     }
 
     @Override
     public List<UserDto> getAllUsersByIds(List<Long> ids, Pageable pageable) {
         if (ids == null || ids.isEmpty()) {
             return userRepository.findAll(pageable).stream()
-                    .map(UserMapper::toUserDto)
+                    .map(UserMapper.INSTANCE::toUserDto)
                     .collect(Collectors.toList());
         } else {
             return userRepository.findAllByIdIn(ids, pageable).stream()
-                    .map(UserMapper::toUserDto)
+                    .map(UserMapper.INSTANCE::toUserDto)
                     .collect(Collectors.toList());
         }
     }

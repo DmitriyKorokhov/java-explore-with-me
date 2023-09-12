@@ -59,7 +59,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
         checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
         User eventUser = userServiceAdmin.getUser(userId);
-        Category eventCategory = CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
+        Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
         Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
         Event newEvent = EventMapper.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
                 EventState.PENDING);
@@ -80,7 +80,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
         }
         if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
             event.setDescription(updateEventUserRequest.getDescription());
@@ -163,7 +163,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     }
 
     private Location getOrSaveLocation(LocationDto locationDto) {
-        Location newLocation = LocationMapper.toLocation(locationDto);
+        Location newLocation = LocationMapper.INSTANCE.toLocation(locationDto);
         return locationRepository.findByLatAndLon(newLocation.getLat(), newLocation.getLon())
                 .orElseGet(() -> locationRepository.save(newLocation));
     }

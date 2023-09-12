@@ -1,32 +1,20 @@
 package ru.practicum.main_service.user.mapper;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import ru.practicum.main_service.user.dto.NewUserRequest;
 import ru.practicum.main_service.user.dto.UserDto;
 import ru.practicum.main_service.user.dto.UserShortDto;
 import ru.practicum.main_service.user.model.User;
 
-@UtilityClass
-public class UserMapper {
-    public User toUser(NewUserRequest newUserRequest) {
-        return User.builder()
-                .name(newUserRequest.getName())
-                .email(newUserRequest.getEmail())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-    public UserDto toUserDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
-    }
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    public UserShortDto toUserShortDto(User user) {
-        return UserShortDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .build();
-    }
+    User toUser(NewUserRequest newUserRequest);
+
+    UserDto toUserDto(User user);
+
+    UserShortDto toUserShortDto(User user);
 }

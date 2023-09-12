@@ -56,7 +56,7 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
         } else {
             newRequest.setStatus(RequestStatus.PENDING);
         }
-        return RequestMapper.toParticipationRequestDto(requestRepository.save(newRequest));
+        return RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(newRequest));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
                 .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
         checkUserIsOwner(request.getRequester().getId(), userId);
         request.setStatus(RequestStatus.CANCELED);
-        return RequestMapper.toParticipationRequestDto(requestRepository.save(request));
+        return RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(request));
     }
 
     @Override
@@ -146,7 +146,7 @@ public class RequestServicePrivatePrivateImpl implements RequestServicePrivate {
 
     private List<ParticipationRequestDto> toParticipationRequestsDto(List<Request> requests) {
         return requests.stream()
-                .map(RequestMapper::toParticipationRequestDto)
+                .map(RequestMapper.INSTANCE::toParticipationRequestDto)
                 .collect(Collectors.toList());
     }
 

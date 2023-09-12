@@ -31,7 +31,7 @@ public class CompilationServiceAdminImpl implements CompilationServiceAdmin {
     @Transactional
     public CompilationDto addCompilation(NewCompilationDto newCompilationDto) {
         List<Event> events = getEventsFromNewCompilationDto(newCompilationDto);
-        Compilation compilation = compilationRepository.save(CompilationMapper.newDtoToCompilation(newCompilationDto, events));
+        Compilation compilation = compilationRepository.save(CompilationMapper.INSTANCE.newDtoToCompilation(newCompilationDto, events));
         return compilationServicePublic.getCompilationById(compilation.getId());
     }
 

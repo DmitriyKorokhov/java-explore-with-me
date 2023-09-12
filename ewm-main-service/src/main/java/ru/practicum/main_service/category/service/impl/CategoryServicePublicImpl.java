@@ -23,14 +23,14 @@ public class CategoryServicePublicImpl implements CategoryServicePublic {
 
     @Override
     public CategoryDto getCategoryById(Long catId) {
-        return CategoryMapper.toCategoryDto(categoryRepository.findById(catId)
+        return CategoryMapper.INSTANCE.toCategoryDto(categoryRepository.findById(catId)
                 .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found")));
     }
 
     @Override
     public List<CategoryDto> getAllCategory(Pageable pageable) {
         return categoryRepository.findAll(pageable).stream()
-                .map(CategoryMapper::toCategoryDto)
+                .map(CategoryMapper.INSTANCE::toCategoryDto)
                 .collect(Collectors.toList());
     }
 }

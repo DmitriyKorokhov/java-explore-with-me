@@ -42,7 +42,7 @@ public class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .state(event.getState())
                 .createdOn(event.getCreatedOn())
-                .location(LocationMapper.toLocationDto(event.getLocation()))
+                .location(LocationMapper.INSTANCE.toLocationDto(event.getLocation()))
                 .build();
     }
 
@@ -53,9 +53,9 @@ public class EventMapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .annotation(event.getAnnotation())
-                .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .category(CategoryMapper.INSTANCE.toCategoryDto(event.getCategory()))
                 .confirmedRequests(confirmedRequests)
-                .initiator(UserMapper.toUserShortDto(event.getInitiator()))
+                .initiator(UserMapper.INSTANCE.toUserShortDto(event.getInitiator()))
                 .views(views)
                 .build();
     }

@@ -57,7 +57,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
             event.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.categoryDtoToCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory())));
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory())));
         }
         if (updateEventAdminRequest.getEventDate() != null) {
             event.setEventDate(updateEventAdminRequest.getEventDate());
@@ -109,7 +109,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
     }
 
     private Location getOrSaveLocation(LocationDto locationDto) {
-        Location newLocation = LocationMapper.toLocation(locationDto);
+        Location newLocation = LocationMapper.INSTANCE.toLocation(locationDto);
         return locationRepository.findByLatAndLon(newLocation.getLat(), newLocation.getLon())
                 .orElseGet(() -> locationRepository.save(newLocation));
     }

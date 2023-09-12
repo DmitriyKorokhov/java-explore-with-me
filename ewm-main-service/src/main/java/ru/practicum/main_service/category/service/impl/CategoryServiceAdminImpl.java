@@ -27,7 +27,7 @@ public class CategoryServiceAdminImpl implements CategoryServiceAdmin {
         if (categoryRepository.findByName(newCategoryDto.getName()) != null) {
             throw new ConflictException("A category with that name already exists");
         }
-        return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.newCategoryDtoToCategory(newCategoryDto)));
+        return CategoryMapper.INSTANCE.toCategoryDto(categoryRepository.save(CategoryMapper.INSTANCE.newCategoryDtoToCategory(newCategoryDto)));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CategoryServiceAdminImpl implements CategoryServiceAdmin {
             throw new ConflictException("A category with that name already exists");
         }
         categoryDto.setId(catId);
-        return CategoryMapper.toCategoryDto(CategoryMapper.categoryDtoToCategory(categoryDto));
+        return CategoryMapper.INSTANCE.toCategoryDto(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDto));
     }
 
     @Override

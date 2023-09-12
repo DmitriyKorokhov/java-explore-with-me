@@ -30,7 +30,7 @@ public class CompilationServicePublicImpl implements CompilationServicePublic {
     public CompilationDto getCompilationById(Long compId) {
         Compilation compilation = getCompilation(compId);
         List<EventShortDto> eventsShortDto = eventServicePrivate.toEventsShortDto(compilation.getEvents());
-        return CompilationMapper.toCompilationDto(compilation, eventsShortDto);
+        return CompilationMapper.INSTANCE.toCompilationDto(compilation, eventsShortDto);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CompilationServicePublicImpl implements CompilationServicePublic {
                 .map(compilation -> {
                     List<EventShortDto> compEventsShortDto = new ArrayList<>();
                     compilation.getEvents().forEach(event -> compEventsShortDto.add(eventsShortDto.get(event.getId())));
-                    return CompilationMapper.toCompilationDto(compilation, compEventsShortDto);
+                    return CompilationMapper.INSTANCE.toCompilationDto(compilation, compEventsShortDto);
                 }).collect(Collectors.toList());
     }
 

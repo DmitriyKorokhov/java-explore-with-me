@@ -18,6 +18,6 @@ public class HitServiceImpl implements HitService {
     @Override
     @Transactional
     public Hit addHit(HitDto hitDto) {
-        return statsRepository.save(HitMapper.toHit(hitDto));
+        return statsRepository.save(HitMapper.INSTANCE.toHit(hitDto));
     }
 }
