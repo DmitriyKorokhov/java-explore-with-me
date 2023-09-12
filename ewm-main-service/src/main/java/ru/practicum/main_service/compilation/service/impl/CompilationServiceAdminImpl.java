@@ -50,7 +50,6 @@ public class CompilationServiceAdminImpl implements CompilationServiceAdmin {
             checkSize(events, updateCompilationRequest.getEvents());
             compilation.setEvents(events);
         }
-        compilationRepository.save(compilation);
         return compilationServicePublic.getCompilationById(compId);
     }
 

@@ -90,7 +90,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
         if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
-        return toEventFullDto(eventRepository.save(event));
+        return toEventFullDto(event);
     }
 
     private List<EventFullDto> toEventsFullDto(List<Event> events) {

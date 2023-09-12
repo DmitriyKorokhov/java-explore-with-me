@@ -113,7 +113,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         if (updateEventUserRequest.getTitle() != null  && !updateEventUserRequest.getTitle().isBlank()) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
-        return toEventFullDto(eventRepository.save(event));
+        return toEventFullDto(event);
     }
 
     @Override
