@@ -7,12 +7,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
+import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParticipationRequestDto {
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime created;
     @PositiveOrZero(message = "The Id events cannot be negative")
     private Long event;
