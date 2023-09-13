@@ -33,10 +33,9 @@ public class UserControllerAdmin {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsersByIds(
-            @RequestParam(required = false) List<Long> ids,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+    public List<UserDto> getAllUsersByIds(@RequestParam(required = false) List<Long> ids,
+                                          @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                          @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Request to get all users by id");
         return userServiceAdmin.getAllUsersByIds(ids, EwmPageRequest.of(from, size));
     }
