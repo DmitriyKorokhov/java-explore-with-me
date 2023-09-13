@@ -31,14 +31,15 @@ public class EventControllerAdmin {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventFullDto> getAllEventsForAdmin(
-            @RequestParam(required = false) List<Long> users,
-            @RequestParam(required = false) List<EventState> states,
-            @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(defaultValue = "10") @Positive Integer size) {
+    public List<EventFullDto> getAllEventsForAdmin(@RequestParam(required = false) List<Long> users,
+                                                   @RequestParam(required = false) List<EventState> states,
+                                                   @RequestParam(required = false) List<Long> categories,
+                                                   @RequestParam(required = false)
+                                                       @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
+                                                   @RequestParam(required = false)
+                                                       @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeEnd,
+                                                   @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                   @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Request to search for all events (administrator)");
         return eventServiceAdmin.getAllEventsForAdmin(users, states, categories, rangeStart, rangeEnd, EwmPageRequest.of(from, size));
     }

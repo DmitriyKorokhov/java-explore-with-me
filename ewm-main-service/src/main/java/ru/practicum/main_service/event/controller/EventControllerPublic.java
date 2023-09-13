@@ -27,13 +27,13 @@ import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
 @RequestMapping("/events")
 public class EventControllerPublic {
 
-    private final EventServicePublic eventService;
+    private final EventServicePublic eventServicePublic;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getPublicEventById(@PathVariable Long id, HttpServletRequest request) {
         log.info("Request to receive an event by id = {} (public)", id);
-        return eventService.getPublicEventById(id, request);
+        return eventServicePublic.getPublicEventById(id, request);
     }
 
     @GetMapping
@@ -51,7 +51,7 @@ public class EventControllerPublic {
                                                   @RequestParam(defaultValue = "10") @Positive Integer size,
                                                   HttpServletRequest request) {
         log.info("Request to receive all events (public)");
-        return eventService.getAllPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+        return eventServicePublic.getAllPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
                 sort, EwmPageRequest.of(from, size), request);
     }
 }
