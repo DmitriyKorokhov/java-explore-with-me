@@ -17,4 +17,5 @@ public class ErrorHandler {
     public ApiError handleConflict(RuntimeException exception) {
         return new ApiError("CONFLICT", exception.getMessage(), HttpStatus.CONFLICT.toString(), LocalDateTime.now());
     }
+
 }

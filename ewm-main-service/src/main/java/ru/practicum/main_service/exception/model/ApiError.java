@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,6 +15,6 @@ public class ApiError {
     private String message;
     private String reason;
     private String status;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DATE_FORMAT)
     private LocalDateTime timestamp;
 }
