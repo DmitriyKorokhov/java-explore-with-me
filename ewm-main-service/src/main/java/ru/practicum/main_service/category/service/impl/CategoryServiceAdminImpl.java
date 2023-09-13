@@ -1,6 +1,7 @@
 package ru.practicum.main_service.category.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.category.dto.CategoryDto;
@@ -12,6 +13,7 @@ import ru.practicum.main_service.category.storage.CategoryRepository;
 import ru.practicum.main_service.event.storage.EventRepository;
 import ru.practicum.main_service.exception.ConflictException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
