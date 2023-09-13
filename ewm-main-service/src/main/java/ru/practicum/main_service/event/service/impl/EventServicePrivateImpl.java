@@ -74,7 +74,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         userServiceAdmin.getUser(userId);
         Event event = getEventByIdAndInitiatorId(eventId, userId);
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("You cannot change published events");
+            throw new ConflictException("Published events cannot be changed");
         }
         if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
