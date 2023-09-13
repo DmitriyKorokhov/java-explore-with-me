@@ -31,9 +31,10 @@ public class CompilationControllerPublic {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
-                                                   @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                   @RequestParam(defaultValue = "10") @Positive Integer size) {
+    public List<CompilationDto> getAllCompilations(
+            @RequestParam(required = false) Boolean pinned,
+            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Request to search for all collections of events, by pinning condition {}", pinned);
         return compilationServicePublic.getAllCompilations(pinned, EwmPageRequest.of(from, size));
     }
