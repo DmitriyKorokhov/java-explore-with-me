@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RequestServicePrivatePrivatePrivateImpl implements RequestServicePrivate {
+public class RequestServicePrivateImpl implements RequestServicePrivate {
 
     private final UserServiceAdmin userServiceAdmin;
     private final EventServicePrivate eventServicePrivate;
