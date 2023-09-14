@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserServiceAdmin {
     UserDto addUser(NewUserRequest newUserRequest);
 
+    User getUser(long id);
+
     List<UserDto> getAllUsersByIds(List<Long> ids, Pageable pageable);
 
     void deleteUserById(long id);
-
-    User getUser(long id);
 }

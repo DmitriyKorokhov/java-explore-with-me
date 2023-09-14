@@ -21,7 +21,7 @@ services:
     environment:
       - stats-server-port=9093
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats_db:5432/stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats_db:5432/stats-db
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
 
@@ -31,12 +31,12 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=stats
+      - POSTGRES_DB=stats-db
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
     hostname: stats_db
 
-  ewm-service:
+  ewm-main-service:
     build: ./ewm-main-service
     image: ewm-main-server-image
     container_name: ewm-main-server-container
@@ -47,7 +47,7 @@ services:
     environment:
       - ewm-server-port=8080
       - stats-server.url=http://stats-client:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm_db:5432/ewm
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
       - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
@@ -58,7 +58,6 @@ services:
     ports:
       - "6542:5432"
     environment:
-      - POSTGRES_DB=ewm
+      - POSTGRES_DB=ewm-db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-    hostname: ewm_db

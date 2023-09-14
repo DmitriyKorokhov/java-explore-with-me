@@ -1,7 +1,6 @@
 package ru.practicum.main_service.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,6 +37,19 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     private final StatsService statsService;
     private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
+
+    @Override
+    @Transactional
+    public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
+        checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
+        User eventUser = userServiceAdmin.getUser(userId);
+        Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
+        Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
+        Event newEvent = EventMapper.INSTANCE.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
+                EventState.PENDING);
+        Event ev = eventRepository.save(newEvent);
+        return toEventFullDto(ev);
+    }
 
     @Override
     public EventFullDto getPrivateEventByIdAndByUserId(Long userId, Long eventId) {
@@ -56,19 +67,6 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     @Override
     @Transactional
-    public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
-        checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
-        User eventUser = userServiceAdmin.getUser(userId);
-        Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
-        Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
-        Event newEvent = EventMapper.INSTANCE.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
-                EventState.PENDING);
-        Event ev = eventRepository.save(newEvent);
-        return toEventFullDto(ev);
-    }
-
-    @Override
-    @Transactional
     public EventFullDto updatePrivateEventByIdAndByUserId(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         checkNewEventDate(updateEventUserRequest.getEventDate(), LocalDateTime.now().plusHours(2));
         userServiceAdmin.getUser(userId);
@@ -76,13 +74,13 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         if (event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Published events cannot be changed");
         }
-        if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
+        if (updateEventUserRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
             event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
         }
-        if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
+        if (updateEventUserRequest.getDescription() != null) {
             event.setDescription(updateEventUserRequest.getDescription());
         }
         if (updateEventUserRequest.getEventDate() != null) {
@@ -110,7 +108,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
                     break;
             }
         }
-        if (updateEventUserRequest.getTitle() != null  && !updateEventUserRequest.getTitle().isBlank()) {
+        if (updateEventUserRequest.getTitle() != null) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
         return toEventFullDto(event);

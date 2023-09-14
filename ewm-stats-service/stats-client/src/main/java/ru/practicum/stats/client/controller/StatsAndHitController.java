@@ -1,7 +1,6 @@
 package ru.practicum.stats.client.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import static ru.practicum.stats.client.parameters.Constants.DATE_FORMAT;
 
-@Slf4j
 @Validated
 @Controller
 @RequiredArgsConstructor

@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import static ru.practicum.main_service.parameters.Constants.DATE_FORMAT;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class NewEventDto {
     @NotBlank(message = "The Annotation should not be empty")
     @Size(min = 20, max = 2000, message = "The minimum number of characters for a Annotation is 20, the maximum is 2000")

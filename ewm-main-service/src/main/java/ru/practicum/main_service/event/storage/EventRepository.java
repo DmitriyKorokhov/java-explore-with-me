@@ -37,7 +37,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event AS e " +
             "WHERE e.state = 'PUBLISHED' " +
             "AND (COALESCE(:text, NULL) IS NULL OR (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%') ))) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))) " +
             "AND (COALESCE(:categoryIds, NULL) IS NULL OR e.category.id IN :categoryIds) " +
             "AND (COALESCE(:paid, NULL) IS NULL OR e.paid = :paid) " +
             "AND (COALESCE(:rangeStart, NULL) IS NULL OR e.eventDate >= :rangeStart) " +

@@ -1,7 +1,6 @@
 package ru.practicum.main_service.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,7 +37,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
 
     @Override
     public List<EventFullDto> getAllEventsForAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart,
-                                                   LocalDateTime rangeEnd, Pageable page) {
+                                               LocalDateTime rangeEnd, Pageable page) {
         checkStartIsBeforeEnd(rangeStart, rangeEnd);
         List<Event> events = eventRepository.findAllByAdmin(page, users, states, categories, rangeStart, rangeEnd);
         return toEventsFullDto(events);
@@ -50,10 +48,10 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
     public EventFullDto updateEventById(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         checkNewEventDate(updateEventAdminRequest.getEventDate(), LocalDateTime.now().plusHours(1));
         Event event = eventServicePrivate.getEventById(eventId);
-        if (updateEventAdminRequest.getAnnotation() != null && !updateEventAdminRequest.getAnnotation().isBlank()) {
+        if (updateEventAdminRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventAdminRequest.getAnnotation());
         }
-        if (updateEventAdminRequest.getDescription() != null && !updateEventAdminRequest.getDescription().isBlank()) {
+        if (updateEventAdminRequest.getDescription() != null) {
             event.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
@@ -87,7 +85,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
                 event.setState(EventState.CANCELED);
             }
         }
-        if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
+        if (updateEventAdminRequest.getTitle() != null) {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
         return toEventFullDto(event);
