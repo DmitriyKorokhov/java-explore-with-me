@@ -80,8 +80,8 @@ public class RequestServicePrivatePrivatePrivateImpl implements RequestServicePr
 
     @Override
     @Transactional
-    public EventRequestStatusUpdateResult updateRequestsByEventOwner(Long userId, Long eventId,
-                                          EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+    public EventRequestStatusUpdateResult updateRequestsByEventOwner(
+            Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         userServiceAdmin.getUser(userId);
         Event event = eventServicePrivate.getEventById(eventId);
         List<Long> requestIds = eventRequestStatusUpdateRequest.getRequestIds();
