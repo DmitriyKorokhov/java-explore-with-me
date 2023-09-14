@@ -1,49 +1,64 @@
 version: '3.8'
 services:
-  stats-service:
-    build: ./ewm-stat-service/stats-server
-    container_name: stats-service-container
+  stats-client:
+    build: ./ewm-stats-service/stats-client
+    image: ewm-stats-client-image
+    container_name: stats-client-container
     ports:
       - "9090:9090"
+    environment:
+      - stats-client-port=9090
+      - stats-server.url=http://stats-server:9093
+    depends_on:
+      - stats-server
+
+  stats-server:
+    build: ./ewm-stats-service/stats-server
+    image: ewm-stats-server-image
+    container_name: stats-server-container
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - stats-server-port=9093
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats_db:5432/stats
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
 
   stats-db:
     image: postgres:15.1-alpine
     container_name: stats-db-container
-    volumes:
-      - /var/lib/postgresql/data/
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=stats-db
-      - POSTGRES_USER=admin
+      - POSTGRES_DB=stats
       - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+    hostname: stats_db
 
-  ewm-main-service:
+  ewm-service:
     build: ./ewm-main-service
-    container_name: main-service-container
+    image: ewm-main-server-image
+    container_name: ewm-main-server-container
     ports:
       - "8080:8080"
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - ewm-server-port=8080
+      - stats-server.url=http://stats-client:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm_db:5432/ewm
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
 
   ewm-db:
     image: postgres:15.1-alpine
     container_name: ewm-db-container
-    volumes:
-      - /var/lib/postgresql/data/
     ports:
       - "6542:5432"
     environment:
-      - POSTGRES_DB=ewm-db
+      - POSTGRES_DB=ewm
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
+    hostname: ewm_db
