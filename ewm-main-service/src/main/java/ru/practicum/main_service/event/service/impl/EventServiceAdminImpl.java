@@ -1,10 +1,12 @@
 package ru.practicum.main_service.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.dto.CategoryDto;
 import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
 import ru.practicum.main_service.event.dto.*;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -55,7 +58,8 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
             event.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory())));
+            CategoryDto categoryDto = categoryService.getCategoryById(updateEventAdminRequest.getCategory());
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDto));
         }
         if (updateEventAdminRequest.getEventDate() != null) {
             event.setEventDate(updateEventAdminRequest.getEventDate());
@@ -76,7 +80,8 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
         }
         if (updateEventAdminRequest.getStateAction() != null) {
             if (!event.getState().equals(EventState.PENDING)) {
-                throw new ConflictException("The event is not in the waiting status");
+                log.error("The Event is not in the waiting status");
+                throw new ConflictException("The Event is not in the waiting status");
             }
             if (updateEventAdminRequest.getStateAction() == EventStateAction.PUBLISH_EVENT) {
                 event.setState(EventState.PUBLISHED);
@@ -114,18 +119,21 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
 
     private void checkStartIsBeforeEnd(LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+            log.error("Dates are set incorrectly");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
     }
 
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
+            log.error("The time cannot be earlier than two hours from the current moment");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }
 
     private void checkIsNewLimitNotLessOld(Integer newLimit, Long eventParticipantLimit) {
         if (newLimit != 0 && eventParticipantLimit != 0 && (newLimit < eventParticipantLimit)) {
+            log.error("The limit has already been reached");
             throw new ConflictException("The limit has already been reached");
         }
     }

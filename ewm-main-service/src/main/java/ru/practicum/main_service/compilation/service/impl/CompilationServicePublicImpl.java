@@ -1,6 +1,7 @@
 package ru.practicum.main_service.compilation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import ru.practicum.main_service.exception.ValidationException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -57,12 +59,16 @@ public class CompilationServicePublicImpl implements CompilationServicePublic {
         Set<Event> uniqueEvents = new HashSet<>();
         compilations.forEach(compilation -> uniqueEvents.addAll(compilation.getEvents()));
         Map<Long, EventShortDto> eventsShortDto = new HashMap<>();
-        eventServicePrivate.toEventsShortDto(new ArrayList<>(uniqueEvents)).forEach(event -> eventsShortDto.put(event.getId(), event));
+        eventServicePrivate.toEventsShortDto(new ArrayList<>(uniqueEvents))
+                .forEach(event -> eventsShortDto.put(event.getId(), event));
         return eventsShortDto;
     }
 
     private Compilation getCompilation(Long compId) {
         return compilationRepository.findById(compId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Compilation does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 }

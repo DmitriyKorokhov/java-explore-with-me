@@ -1,6 +1,7 @@
 package ru.practicum.main_service.comment.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import ru.practicum.main_service.parameters.EwmPageRequest;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,7 +32,7 @@ public class CommentsServiceAdminImpl implements CommentsServiceAdmin {
     public ResponseCommentDto approveCommentByIdByAdmin(Long commentId) {
         Comment comment = getComment(commentId);
         comment.setStatus(CommentStatus.APPROVED);
-        return CommentMapper.INSTANCE.toResponseCommentDto(commentRepository.save(comment));
+        return CommentMapper.INSTANCE.toResponseCommentDto(comment);
     }
 
     @Override
@@ -45,7 +47,8 @@ public class CommentsServiceAdminImpl implements CommentsServiceAdmin {
     @Override
     public List<ResponseCommentDto> getAllCommentsForAnEventByIdByAdmin(Long eventId, EwmPageRequest page) {
         getEventById(eventId);
-        return CommentMapper.INSTANCE.toResponseCommentsDto(commentRepository.findAllByEventIdAndStatus(eventId, CommentStatus.UNDER_CONSIDERATION, page));
+        List<Comment> listOfComments = commentRepository.findAllByEventIdAndStatus(eventId, CommentStatus.UNDER_CONSIDERATION, page);
+        return CommentMapper.INSTANCE.toResponseCommentsDto(listOfComments);
     }
 
     @Override
@@ -57,11 +60,17 @@ public class CommentsServiceAdminImpl implements CommentsServiceAdmin {
 
     public Event getEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     private Comment getComment(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Comment does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 }

@@ -1,6 +1,7 @@
 package ru.practicum.main_service.comment.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import ru.practicum.main_service.user.storage.UserRepository;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -37,7 +39,8 @@ public class CommentsServicePrivateImpl implements CommentsServicePrivate {
         User user = getUser(userId);
         Event event = getEventById(eventId);
         if (event.getState() != EventState.PUBLISHED) {
-            throw new ConflictException("Request for an unpublished event");
+            log.error("The Event has not been published");
+            throw new ConflictException("Request for an unpublished Event");
         }
         Comment newComment = CommentMapper.INSTANCE.toComment(user, event, newCommentDto);
         return CommentMapper.INSTANCE.toResponseCommentDto(commentRepository.save(newComment));
@@ -56,8 +59,8 @@ public class CommentsServicePrivateImpl implements CommentsServicePrivate {
     @Override
     public List<ResponseCommentDto> getAllCommentsByUser(Long userId, EwmPageRequest page) {
         getUser(userId);
-        List<Comment> result = commentRepository.findAllByAuthorId(userId, page);
-        return CommentMapper.INSTANCE.toResponseCommentsDto(result);
+        List<Comment> listOfComments = commentRepository.findAllByAuthorId(userId, page);
+        return CommentMapper.INSTANCE.toResponseCommentsDto(listOfComments);
     }
 
     @Override
@@ -71,22 +74,32 @@ public class CommentsServicePrivateImpl implements CommentsServicePrivate {
 
     private void checkOwner(Long authorId, Long userId) {
         if (!Objects.equals(authorId, userId)) {
+            log.error("The user is not the owner");
             throw new ConflictException("The user is not the owner");
         }
     }
 
     private User getUser(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The User does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     public Event getEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     private Comment getComment(Long id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Comment does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 }

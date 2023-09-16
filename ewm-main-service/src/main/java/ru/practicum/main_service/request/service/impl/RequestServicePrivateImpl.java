@@ -1,6 +1,7 @@
 package ru.practicum.main_service.request.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -64,7 +66,10 @@ public class RequestServicePrivateImpl implements RequestServicePrivate {
     public ParticipationRequestDto cancelRequestUserById(Long userId, Long requestId) {
         userServiceAdmin.getUser(userId);
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Request does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
         checkUserIsOwner(request.getRequester().getId(), userId);
         request.setStatus(RequestStatus.CANCELED);
         return RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(request));
@@ -115,22 +120,27 @@ public class RequestServicePrivateImpl implements RequestServicePrivate {
 
     private void checkRequests(List<Request> requests, List<Long> requestIds) {
         if (requests.size() != requestIds.size()) {
+            log.error("Incorrect list ratios");
             throw new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
         }
         if (!requests.stream().map(Request::getStatus).allMatch(RequestStatus.PENDING::equals)) {
+            log.error("The application is not in the waiting status");
             throw new ConflictException("The application is not in the waiting status");
         }
     }
 
     private void checkEvent(Event event, Long userId) {
         if (Objects.equals(event.getInitiator().getId(), userId)) {
+            log.error("Application for participation in your own event");
             throw new ConflictException("Application for participation in your own event");
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
+            log.error("Request for an unpublished event");
             throw new ConflictException("Request for an unpublished event");
         }
         Optional<Request> oldRequest = requestRepository.findByEventIdAndRequesterId(event.getId(), userId);
         if (oldRequest.isPresent()) {
+            log.error("Repeat request");
             throw new ConflictException("Repeat request");
         }
         checkEventLimit(statsService.getConfirmedRequests(List.of(event)).getOrDefault(event.getId(), 0L) + 1,
@@ -151,12 +161,14 @@ public class RequestServicePrivateImpl implements RequestServicePrivate {
 
     private void checkEventLimit(Long newLimit, Integer eventLimit) {
         if (eventLimit != 0 && (newLimit > eventLimit)) {
+            log.error("Exceeded the limit");
             throw new ConflictException("Exceeded the limit");
         }
     }
 
     private void checkUserIsOwner(Long id, Long userId) {
         if (!Objects.equals(id, userId)) {
+            log.error("The user is not the owner");
             throw new ConflictException("The user is not the owner");
         }
     }

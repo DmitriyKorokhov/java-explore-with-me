@@ -1,6 +1,7 @@
 package ru.practicum.stats.server.stats.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.stats.dto.model.StatsDto;
@@ -12,6 +13,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class StatsServerImpl implements StatsService {
 
     private void validDate(LocalDateTime start, LocalDateTime end) {
         if (end.isBefore(start) || start.isAfter(end)) {
+            log.error("The dates for the search are set incorrectly");
             throw new ValidationDateException("The dates for the search are set incorrectly");
         }
     }

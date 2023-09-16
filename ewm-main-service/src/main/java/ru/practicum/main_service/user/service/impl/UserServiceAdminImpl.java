@@ -1,6 +1,7 @@
 package ru.practicum.main_service.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import ru.practicum.main_service.exception.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,9 +30,11 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
     @Transactional
     public UserDto addUser(NewUserRequest newUserRequest) {
         if (userRepository.findByName(newUserRequest.getName()) != null) {
+            log.error("A User with this name already exists");
             throw new ConflictException("A user with this name already exists");
         }
-        return UserMapper.INSTANCE.toUserDto(userRepository.save(UserMapper.INSTANCE.toUser(newUserRequest)));
+        User newUser = UserMapper.INSTANCE.toUser(newUserRequest);
+        return UserMapper.INSTANCE.toUserDto(userRepository.save(newUser));
     }
 
     @Override
@@ -56,6 +60,9 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
     @Override
     public User getUser(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The User does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 }

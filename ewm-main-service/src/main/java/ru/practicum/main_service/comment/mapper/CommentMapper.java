@@ -20,11 +20,11 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", constant = "UNDER_CONSIDERATION")
     @Mapping(target = "author", source = "user")
     @Mapping(target = "event", source = "event")
     @Mapping(target = "text", expression = "java(newCommentDto.getText())")
     @Mapping(target = "created", expression = "java(convertToLocation())")
-    @Mapping(target = "status", constant = "UNDER_CONSIDERATION")
     Comment toComment(User user, Event event, NewCommentDto newCommentDto);
 
     @Mapping(target = "eventId", source = "comment.event.id")

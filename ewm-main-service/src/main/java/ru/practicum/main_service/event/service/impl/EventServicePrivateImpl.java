@@ -1,10 +1,12 @@
 package ru.practicum.main_service.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.dto.CategoryDto;
 import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.model.Category;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -72,13 +75,15 @@ public class EventServicePrivateImpl implements EventServicePrivate {
         userServiceAdmin.getUser(userId);
         Event event = getEventByIdAndInitiatorId(eventId, userId);
         if (event.getState().equals(EventState.PUBLISHED)) {
+            log.error("Published events cannot be changed");
             throw new ConflictException("Published events cannot be changed");
         }
         if (updateEventUserRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
+            CategoryDto categoryDto = categoryService.getCategoryById(updateEventUserRequest.getCategory());
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDto));
         }
         if (updateEventUserRequest.getDescription() != null) {
             event.setDescription(updateEventUserRequest.getDescription());
@@ -117,7 +122,10 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     @Override
     public Event getEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     @Override
@@ -157,7 +165,10 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     private Event getEventByIdAndInitiatorId(Long eventId, Long userId) {
         return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     private Location getOrSaveLocation(LocationDto locationDto) {
@@ -168,6 +179,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
+            log.error("The time cannot be earlier than two hours from the current moment");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }

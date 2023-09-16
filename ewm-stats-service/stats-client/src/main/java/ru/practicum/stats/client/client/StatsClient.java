@@ -1,5 +1,6 @@
 package ru.practicum.stats.client.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class StatsClient extends BaseClient {
 
@@ -32,6 +34,7 @@ public class StatsClient extends BaseClient {
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (start.isAfter(end)) {
+            log.error("Dates are set incorrectly");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
         String path = getStatsPath(uris);
