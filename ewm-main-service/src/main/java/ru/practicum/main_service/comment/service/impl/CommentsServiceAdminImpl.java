@@ -59,16 +59,14 @@ public class CommentsServiceAdminImpl implements CommentsServiceAdmin {
     }
 
     public Event getEventById(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> {
+        return eventRepository.findById(eventId).orElseThrow(() -> {
                     log.error("The Event does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });
     }
 
     private Comment getComment(Long id) {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> {
+        return commentRepository.findById(id).orElseThrow(() -> {
                     log.error("The Comment does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });

@@ -59,8 +59,7 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
 
     @Override
     public User getUser(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> {
+        return userRepository.findById(id).orElseThrow(() -> {
                     log.error("The User does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });

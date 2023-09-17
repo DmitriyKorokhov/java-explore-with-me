@@ -26,8 +26,7 @@ public class CategoryServicePublicImpl implements CategoryServicePublic {
 
     @Override
     public CategoryDto getCategoryById(Long catId) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> {
+        Category category = categoryRepository.findById(catId).orElseThrow(() -> {
                     log.error("The Category does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });

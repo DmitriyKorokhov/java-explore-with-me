@@ -121,8 +121,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     @Override
     public Event getEventById(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> {
+        return eventRepository.findById(eventId).orElseThrow(() -> {
                     log.error("The Event does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });
@@ -164,8 +163,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     }
 
     private Event getEventByIdAndInitiatorId(Long eventId, Long userId) {
-        return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> {
+        return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
                     log.error("The Event does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });

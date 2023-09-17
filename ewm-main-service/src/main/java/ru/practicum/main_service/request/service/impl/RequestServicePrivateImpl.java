@@ -65,8 +65,7 @@ public class RequestServicePrivateImpl implements RequestServicePrivate {
     @Transactional
     public ParticipationRequestDto cancelRequestUserById(Long userId, Long requestId) {
         userServiceAdmin.getUser(userId);
-        Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> {
+        Request request = requestRepository.findById(requestId).orElseThrow(() -> {
                     log.error("The Request does not exist");
                     return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
                 });
