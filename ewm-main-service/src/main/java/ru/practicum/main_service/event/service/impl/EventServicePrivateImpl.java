@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.dto.CategoryDto;
 import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.model.Category;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
@@ -41,6 +42,19 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional
+    public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
+        checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
+        User eventUser = userServiceAdmin.getUser(userId);
+        Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
+        Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
+        Event newEvent = EventMapper.INSTANCE.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
+                EventState.PENDING);
+        Event ev = eventRepository.save(newEvent);
+        return toEventFullDto(ev);
+    }
+
+    @Override
     public EventFullDto getPrivateEventByIdAndByUserId(Long userId, Long eventId) {
         userServiceAdmin.getUser(userId);
         Event event = getEventByIdAndInitiatorId(eventId, userId);
@@ -56,33 +70,22 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     @Override
     @Transactional
-    public EventFullDto addPrivateEventByUserId(Long userId, NewEventDto newEventDto) {
-        checkNewEventDate(newEventDto.getEventDate(), LocalDateTime.now().plusHours(2));
-        User eventUser = userServiceAdmin.getUser(userId);
-        Category eventCategory = CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(newEventDto.getCategory()));
-        Location eventLocation = getOrSaveLocation(newEventDto.getLocation());
-        Event newEvent = EventMapper.INSTANCE.toEvent(newEventDto, eventUser, eventCategory, eventLocation, LocalDateTime.now(),
-                EventState.PENDING);
-        Event ev = eventRepository.save(newEvent);
-        return toEventFullDto(ev);
-    }
-
-    @Override
-    @Transactional
     public EventFullDto updatePrivateEventByIdAndByUserId(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         checkNewEventDate(updateEventUserRequest.getEventDate(), LocalDateTime.now().plusHours(2));
         userServiceAdmin.getUser(userId);
         Event event = getEventByIdAndInitiatorId(eventId, userId);
         if (event.getState().equals(EventState.PUBLISHED)) {
+            log.error("Published events cannot be changed");
             throw new ConflictException("Published events cannot be changed");
         }
-        if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
+        if (updateEventUserRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventUserRequest.getCategory())));
+            CategoryDto categoryDto = categoryService.getCategoryById(updateEventUserRequest.getCategory());
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDto));
         }
-        if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
+        if (updateEventUserRequest.getDescription() != null) {
             event.setDescription(updateEventUserRequest.getDescription());
         }
         if (updateEventUserRequest.getEventDate() != null) {
@@ -110,7 +113,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
                     break;
             }
         }
-        if (updateEventUserRequest.getTitle() != null  && !updateEventUserRequest.getTitle().isBlank()) {
+        if (updateEventUserRequest.getTitle() != null) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
         return toEventFullDto(event);
@@ -118,8 +121,10 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     @Override
     public Event getEventById(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+        return eventRepository.findById(eventId).orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     @Override
@@ -158,8 +163,10 @@ public class EventServicePrivateImpl implements EventServicePrivate {
     }
 
     private Event getEventByIdAndInitiatorId(Long eventId, Long userId) {
-        return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+        return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
+                    log.error("The Event does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 
     private Location getOrSaveLocation(LocationDto locationDto) {
@@ -170,6 +177,7 @@ public class EventServicePrivateImpl implements EventServicePrivate {
 
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
+            log.error("The time cannot be earlier than two hours from the current moment");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }

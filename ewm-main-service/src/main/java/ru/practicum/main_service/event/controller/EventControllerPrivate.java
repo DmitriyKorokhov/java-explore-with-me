@@ -73,11 +73,11 @@ public class EventControllerPrivate {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventRequestStatusUpdateResult updateEventRequestStatus(@PathVariable Long userId,
+    public EventRequestStatusUpdateResult updateRequestsByEventOwner(@PathVariable Long userId,
                                                                    @PathVariable Long eventId,
                                 @Valid @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         log.info("Request to update the status of a request for an event with id = {} " +
-                 "for a user with id = {} (private)", eventId, userId);
-        return requestServicePrivate.updateEventRequestStatus(userId, eventId, eventRequestStatusUpdateRequest);
+                "for a user with id = {} (private)", eventId, userId);
+        return requestServicePrivate.updateRequestsByEventOwner(userId, eventId, eventRequestStatusUpdateRequest);
     }
 }

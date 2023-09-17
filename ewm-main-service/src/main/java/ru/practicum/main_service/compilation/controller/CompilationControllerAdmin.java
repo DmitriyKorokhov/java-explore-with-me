@@ -38,7 +38,7 @@ public class CompilationControllerAdmin {
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto updateCompilationById(@PathVariable Long compId,
-                                @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+                                                @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         log.info("Request to update a collection of events by id = {}", compId);
         return compilationServiceAdmin.updateCompilationById(compId, updateCompilationRequest);
     }

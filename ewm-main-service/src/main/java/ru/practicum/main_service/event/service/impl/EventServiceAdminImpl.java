@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.main_service.category.dto.CategoryDto;
 import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.service.CategoryServicePublic;
 import ru.practicum.main_service.event.dto.*;
@@ -39,7 +40,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
 
     @Override
     public List<EventFullDto> getAllEventsForAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart,
-                                                   LocalDateTime rangeEnd, Pageable page) {
+                                               LocalDateTime rangeEnd, Pageable page) {
         checkStartIsBeforeEnd(rangeStart, rangeEnd);
         List<Event> events = eventRepository.findAllByAdmin(page, users, states, categories, rangeStart, rangeEnd);
         return toEventsFullDto(events);
@@ -50,14 +51,15 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
     public EventFullDto updateEventById(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         checkNewEventDate(updateEventAdminRequest.getEventDate(), LocalDateTime.now().plusHours(1));
         Event event = eventServicePrivate.getEventById(eventId);
-        if (updateEventAdminRequest.getAnnotation() != null && !updateEventAdminRequest.getAnnotation().isBlank()) {
+        if (updateEventAdminRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventAdminRequest.getAnnotation());
         }
-        if (updateEventAdminRequest.getDescription() != null && !updateEventAdminRequest.getDescription().isBlank()) {
+        if (updateEventAdminRequest.getDescription() != null) {
             event.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
-            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryService.getCategoryById(updateEventAdminRequest.getCategory())));
+            CategoryDto categoryDto = categoryService.getCategoryById(updateEventAdminRequest.getCategory());
+            event.setCategory(CategoryMapper.INSTANCE.categoryDtoToCategory(categoryDto));
         }
         if (updateEventAdminRequest.getEventDate() != null) {
             event.setEventDate(updateEventAdminRequest.getEventDate());
@@ -78,7 +80,8 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
         }
         if (updateEventAdminRequest.getStateAction() != null) {
             if (!event.getState().equals(EventState.PENDING)) {
-                throw new ConflictException("The event is not in the waiting status");
+                log.error("The Event is not in the waiting status");
+                throw new ConflictException("The Event is not in the waiting status");
             }
             if (updateEventAdminRequest.getStateAction() == EventStateAction.PUBLISH_EVENT) {
                 event.setState(EventState.PUBLISHED);
@@ -87,7 +90,7 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
                 event.setState(EventState.CANCELED);
             }
         }
-        if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
+        if (updateEventAdminRequest.getTitle() != null) {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
         return toEventFullDto(event);
@@ -116,18 +119,21 @@ public class EventServiceAdminImpl implements EventServiceAdmin {
 
     private void checkStartIsBeforeEnd(LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+            log.error("Dates are set incorrectly");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Dates are set incorrectly");
         }
     }
 
     private void checkNewEventDate(LocalDateTime newEventDate, LocalDateTime minTimeBeforeEventStart) {
         if (newEventDate != null && newEventDate.isBefore(minTimeBeforeEventStart)) {
+            log.error("The time cannot be earlier than two hours from the current moment");
             throw new ValidationException(HttpStatus.BAD_REQUEST, "The time cannot be earlier than two hours from the current moment");
         }
     }
 
     private void checkIsNewLimitNotLessOld(Integer newLimit, Long eventParticipantLimit) {
         if (newLimit != 0 && eventParticipantLimit != 0 && (newLimit < eventParticipantLimit)) {
+            log.error("The limit has already been reached");
             throw new ConflictException("The limit has already been reached");
         }
     }

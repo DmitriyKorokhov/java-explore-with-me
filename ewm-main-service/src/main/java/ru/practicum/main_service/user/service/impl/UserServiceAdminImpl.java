@@ -30,9 +30,11 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
     @Transactional
     public UserDto addUser(NewUserRequest newUserRequest) {
         if (userRepository.findByName(newUserRequest.getName()) != null) {
+            log.error("A User with this name already exists");
             throw new ConflictException("A user with this name already exists");
         }
-        return UserMapper.INSTANCE.toUserDto(userRepository.save(UserMapper.INSTANCE.toUser(newUserRequest)));
+        User newUser = UserMapper.INSTANCE.toUser(newUserRequest);
+        return UserMapper.INSTANCE.toUserDto(userRepository.save(newUser));
     }
 
     @Override
@@ -57,7 +59,9 @@ public class UserServiceAdminImpl implements UserServiceAdmin {
 
     @Override
     public User getUser(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ValidationException(HttpStatus.NOT_FOUND, "Resource not found"));
+        return userRepository.findById(id).orElseThrow(() -> {
+                    log.error("The User does not exist");
+                    return new ValidationException(HttpStatus.NOT_FOUND, "Resource not found");
+                });
     }
 }

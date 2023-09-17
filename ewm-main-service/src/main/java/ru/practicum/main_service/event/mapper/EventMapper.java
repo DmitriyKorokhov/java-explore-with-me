@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.main_service.category.dto.CategoryDto;
-import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.category.model.Category;
+import ru.practicum.main_service.category.mapper.CategoryMapper;
 import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.dto.LocationDto;
@@ -14,8 +14,8 @@ import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.EventState;
 import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.user.dto.UserShortDto;
-import ru.practicum.main_service.user.mapper.UserMapper;
 import ru.practicum.main_service.user.model.User;
+import ru.practicum.main_service.user.mapper.UserMapper;
 
 import java.time.LocalDateTime;
 
